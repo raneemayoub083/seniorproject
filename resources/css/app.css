@@ -1,0 +1,241 @@
+
+        .table thead {
+            background-color: #3674B5;
+        }
+
+        .table thead th {
+            color: #fff;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #D1F8EF;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #D1F8EF;
+        }
+
+        .table tbody td:nth-child(odd) {
+            color: #3674B5
+        }
+
+        .table tbody td:nth-child(even) {
+            color: #3674B5;
+        }
+
+
+        .btn-warning {
+            background-color: #FFAA00;
+            border-color: #FFAA00;
+        }
+
+        .btn-danger {
+            background-color: #FF5733;
+            border-color: #FF5733;
+        }
+
+        .btn-warning:hover,
+        .btn-danger:hover {
+            opacity: 0.8;
+        }
+
+        h1 {
+            background-color: #578FCA;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        /* DataTables Custom Styling */
+        /* Style the search input */
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #3674B5;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        /* Style the "Show entries" dropdown */
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid #3674B5;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        /* Style pagination buttons */
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            background-color: #578FCA;
+            border: none;
+            border-radius: 4px;
+            color: white !important;
+            padding: 6px 12px;
+            margin: 2px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background-color: #3674B5 !important;
+            
+        }
+
+        /* Style table info text */
+        .dataTables_wrapper .dataTables_info {
+            color: #333;
+        }
+     .bg-primary {
+            background-color: #3674B5 !important;
+        }
+
+        .btn-warning {
+            background-color: #FFA500;
+            border-color: #FFA500;
+        }
+
+        .btn-danger {
+            background-color: #FF0000;
+            border-color: #FF0000;
+        }
+
+        .btn-success {
+            background-color: #3674B5 !important;
+            border-color: #3674B5 !important;
+        }
+
+
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(54, 116, 181, 0.1);
+        }
+
+        .table-striped tbody tr:nth-of-type(even) {
+            background-color: rgba(54, 116, 181, 0.05);
+        }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #3674B5;
+        }
+
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #3674B5;
+            border-radius: 4px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            color: #3674B5 !important;
+            border: 1px solid #3674B5;
+            border-radius: 4px;
+            margin: 2px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background-color: #3674B5 !important;
+            color: white !important;
+        }
+         /* === buttonpma button style ===*/
+        .buttonpma {
+            margin: 0;
+            height: auto;
+            background: transparent;
+            padding: 0;
+            border: none;
+            animation: r1 3s ease-in-out infinite;
+            /*linear*/
+            border: 7px #3674B5 solid;
+            border-radius: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: 100%;
+
+                height: auto;
+                /* Adjust height for smaller screens */
+                /* margin: 10px; */
+            }
+
+            .card h2 {
+                font-size: 1.3em;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                /* Adjust height for very small screens */
+                margin: 5px;
+            }
+
+            .card h2 {
+                font-size: 0.7em;
+            }
+        }
+
+        /* button styling */
+        .buttonpma {
+            --border-right: 6px;
+            --text-stroke-color: #3674B5;
+            --animation-color: #3674B5;
+            --fs-size: 2em;
+            letter-spacing: 3px;
+            text-decoration: none;
+            font-size: var(--fs-size);
+            font-family: "Arial";
+            position: relative;
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--text-stroke-color);
+        }
+
+        @media screen and (max-width: 600px) {
+            .buttonpma {
+                --fs-size: 1em;
+            }
+
+        }
+
+        /* this is the text, when you hover on button */
+        .hover-text {
+            position: absolute;
+            box-sizing: border-box;
+            content: attr(data-text);
+            color: var(--animation-color);
+            width: 0%;
+            inset: 0;
+            border-right: var(--border-right) solid var(--animation-color);
+            overflow: hidden;
+            transition: 1.5s;
+            -webkit-text-stroke: 1px var(--animation-color);
+            animation: r2 2s ease-in-out infinite;
+        }
+
+        /* hover */
+        .buttonpma:hover .hover-text {
+            width: 100%;
+            filter: drop-shadow(0 0 70px var(--animation-color));
+        }
+
+        @keyframes r1 {
+            50% {
+                /* transform: rotate(-2deg) ; */
+            }
+        }
+
+        @keyframes r2 {
+            50% {
+                transform: rotateX(-65deg);
+            }
+        }
