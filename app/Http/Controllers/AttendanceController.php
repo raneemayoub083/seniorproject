@@ -7,6 +7,9 @@ use App\Models\Attendance;
 use Illuminate\Support\Facades\DB;
 use App\Models\Section;
 use App\Models\Subject;
+use Carbon\Carbon;
+use Psy\Readline\Hoa\Console;
+
 
 class AttendanceController extends Controller
 {
@@ -48,8 +51,16 @@ class AttendanceController extends Controller
             ->where('date', $date)
             ->pluck('status', 'student_id');
 
-        return view('teacherdash.attendance._student_toggle_list', compact('students', 'attendanceMap'));
+        $isReadOnly = false;
+        $attendanceDate = \Carbon\Carbon::parse($date);
+        if ($attendanceDate->isPast() && $attendanceDate->diffInHours(now()) > 24) {
+            $isReadOnly = true;
+        }
+       
+        return view('teacherdash.attendance._student_toggle_list', compact('students', 'attendanceMap', 'isReadOnly'));
     }
+
+
 
     public function store(Request $request)
     {
@@ -59,6 +70,15 @@ class AttendanceController extends Controller
         $teacherId = auth()->user()->teacher->id;
         $attendances = $request->input('attendances'); // student_id => present/absent
 
+        // Restriction: Disallow updating if the date is over 24 hours in the past
+        $attendanceDate = Carbon::parse($date);
+        if ($attendanceDate->isPast() && $attendanceDate->diffInHours(now()) > 24) {
+            return response()->json([
+                'message' => 'You cannot update attendance for dates older than 24 hours.'
+            ], 403);
+        }
+
+        // Save or update attendance
         foreach ($attendances as $studentId => $status) {
             Attendance::updateOrCreate([
                 'student_id' => $studentId,

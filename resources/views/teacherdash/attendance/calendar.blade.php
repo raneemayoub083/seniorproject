@@ -47,7 +47,12 @@
                         <!-- Loaded dynamically -->
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary w-100">Save Attendance</button>
+                       
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary w-100">Save Attendance</button>
+                        </div>
+                    
+
                     </div>
                 </div>
             </form>
@@ -77,18 +82,33 @@
                 eventColor: '#28a745',
                 events: `/teacher/attendance/events?section_id=${sectionId}&subject_id=${subjectId}`,
                 dateClick: function(info) {
-                    const clickedDate = info.dateStr;
-                    $('#attendance-date').val(clickedDate);
+                    const clickedDate = new Date(info.dateStr);
+                    const now = new Date();
 
+                    const timeDiff = now - clickedDate; // in milliseconds
+                    const hoursDiff = timeDiff / (1000 * 60 * 60); // convert to hours
+
+                    if (hoursDiff > 24) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Too Late',
+                            text: 'You cannot update attendance for past dates beyond 24 hours.',
+                        });
+                        return;
+                    }
+
+                    // Continue loading modal
+                    $('#attendance-date').val(info.dateStr);
                     $.get(`/teacher/attendance/students`, {
-                        date: clickedDate,
-                        section_id: sectionId,
-                        subject_id: subjectId
+                        date: info.dateStr,
+                        section_id: $('#section-id').val(),
+                        subject_id: $('#subject-id').val()
                     }, function(html) {
                         $('#attendance-body').html(html);
                         $('#attendanceModal').modal('show');
                     });
                 }
+
             });
 
             calendar.render();
