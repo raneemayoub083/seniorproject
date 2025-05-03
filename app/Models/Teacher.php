@@ -40,8 +40,9 @@ class Teacher extends Model
     }
     public function user()
     {
-        return $this->belongsTo(User::class); // Assuming the user_id links to the User model
+        return $this->belongsTo(User::class, 'user_id');
     }
+
     public function sectionSubjectTeachers()
     {
         return $this->hasMany(\App\Models\SectionSubjectTeacher::class);

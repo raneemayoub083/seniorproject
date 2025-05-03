@@ -24,7 +24,7 @@ use App\Exports\StudentsExport;
 use App\Http\Controllers\NotificationController;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\ParentDashboardController;
-
+use App\Http\Controllers\MessageController;
 use App\Http\Livewire\LaravelExamples\UserProfile;
 use App\Http\Livewire\LaravelExamples\UserManagement;
 
@@ -58,7 +58,8 @@ Route::get('/reset-password/{id}', ResetPassword::class)->name('reset-password')
 
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/redirect-based-on-role', \App\Http\Controllers\RoleRedirectController::class);
+    Route::get('/chat/{receiverId?}', [MessageController::class, 'index'])->name('chat.index');
+    Route::post('/chat/send', [MessageController::class, 'send'])->name('chat.send');
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::middleware(['auth', 'role:1'])->group(function () {
     // Dashboard Route
@@ -131,6 +132,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lessons/store', [LessonController::class, 'store'])->name('lessons.store');
     Route::get('/lessons/{sectionId}', [LessonController::class, 'showLessonsBySection'])
         ->name('lessons.bySection');
+       
 });
     Route::middleware(['auth', 'role:3'])->group(function () {
     // Student dashboard route
@@ -148,5 +150,6 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::middleware(['auth', 'role:4'])->group(function () {
         Route::get('/parent/dashboard', [ParentDashboardController::class, 'index'])->middleware(['auth'])->name('parentdash.dashboard');
+
     });
 });

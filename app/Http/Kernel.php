@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Console\Scheduling\Schedule;
 
 class Kernel extends HttpKernel
 {
@@ -69,4 +70,9 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\CheckRole::class,
 
     ];
+    protected function schedule(Schedule $schedule)
+    {
+        // Schedule the message deletion command to run daily
+        $schedule->command('app:delete-old-messages')->daily();
+    }
 }

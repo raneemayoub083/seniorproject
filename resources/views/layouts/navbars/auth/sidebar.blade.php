@@ -119,6 +119,20 @@
                     <span class="nav-link-text ms-1">Attendance</span>
                 </a>
             </li>
+            <li class="nav-item pb-2">
+                <a class="nav-link {{ Str::startsWith(Route::currentRouteName(), 'chat.index') ? 'active' : '' }}"
+                    href="{{ route('chat.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path class="color-background"
+                                d="M256 32C114.6 32 0 125.1 0 240c0 49.6 24.3 95.1 64.7 130.3-4.3 14.7-11.8 32.6-22.6 52.2-2.8 5-2.5 11.2.8 16.1s9 7.6 14.9 7.6c61.9 0 111.7-18.7 142.8-35.5 18.1 4.3 37.3 6.4 56.4 6.4 141.4 0 256-93.1 256-208S397.4 32 256 32z" />
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Chat</span>
+                </a>
+            </li>
+
             @endif
             @endif
             @if(Auth::check())
@@ -174,6 +188,19 @@
                         </svg>
                     </div>
                     <span class="nav-link-text ms-1">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item pb-2">
+                <a class="nav-link {{ Str::startsWith(Route::currentRouteName(), 'chat.index') ? 'active' : '' }}"
+                    href="{{ route('chat.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path class="color-background"
+                                d="M256 32C114.6 32 0 125.1 0 240c0 49.6 24.3 95.1 64.7 130.3-4.3 14.7-11.8 32.6-22.6 52.2-2.8 5-2.5 11.2.8 16.1s9 7.6 14.9 7.6c61.9 0 111.7-18.7 142.8-35.5 18.1 4.3 37.3 6.4 56.4 6.4 141.4 0 256-93.1 256-208S397.4 32 256 32z" />
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Chat</span>
                 </a>
             </li>
 
