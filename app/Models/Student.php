@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Student extends Model
 {
     use HasFactory;
@@ -42,5 +43,30 @@ class Student extends Model
     public function parent()
     {
         return $this->belongsTo(StudentParent::class, 'parent_id');
+    }
+    public function activeSection()
+    {
+        return $this->sections()
+            ->whereHas('academicYear', function ($q) {
+                $q->where('status', 'pending');
+            })
+            ->with('grade', 'academicYear') // eager load for display
+            ->first();
+    }
+    public function previousSections()
+    {
+        return $this->sections()
+            ->whereHas('academicYear', function ($query) {
+                $query->where('status', '!=', 'pending'); // Or 'status' = 'completed'
+            })
+            ->with('grade', 'academicYear');
+    }
+    public function examGrades()
+    {
+        return $this->hasMany(ExamStudentGrade::class);
+    }
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
     }
 }

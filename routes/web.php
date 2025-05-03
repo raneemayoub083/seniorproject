@@ -23,7 +23,7 @@ use App\Http\Controllers\ExamController;
 use App\Exports\StudentsExport;
 use App\Http\Controllers\NotificationController;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Http\Controllers\ParentDashboardController;
 
 use App\Http\Livewire\LaravelExamples\UserProfile;
 use App\Http\Livewire\LaravelExamples\UserManagement;
@@ -147,8 +147,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student/attendance/events/{section}', [StudentController::class, 'attendanceEvents'])->name('student.attendance.events');
     });
     Route::middleware(['auth', 'role:4'])->group(function () {
-    Route::get('/parent/dashboard', function () {
-        return view('parentdash.dashboard');
-    })->name('parentdash.dashboard');
+        Route::get('/parent/dashboard', [ParentDashboardController::class, 'index'])->middleware(['auth'])->name('parentdash.dashboard');
     });
 });

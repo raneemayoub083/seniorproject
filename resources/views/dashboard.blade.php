@@ -437,6 +437,32 @@
             const progress = JSON.parse('{!! json_encode($academicYearProgress) !!}');
             const bgColor = progress >= 100 ? '#28a745' : (progress <= 0 ? '#dc3545' : '#3674B5');
 
+            // Plugin to draw center text
+            const centerTextPlugin = {
+                id: 'centerText',
+                beforeDraw(chart) {
+                    const {
+                        width,
+                        height
+                    } = chart;
+                    const ctx = chart.ctx;
+                    ctx.restore();
+
+                    const fontSize = (height / 5).toFixed(2);
+                    ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
+                    ctx.textBaseline = 'middle';
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = bgColor;
+
+                    const text = progress + '%';
+                    const x = width / 2;
+                    const y = height / 2;
+
+                    ctx.fillText(text, x, y);
+                    ctx.save();
+                }
+            };
+
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -462,20 +488,12 @@
                             display: false
                         }
                     }
-                }
+                },
+                plugins: [centerTextPlugin]
             });
-
-            // Add large % label in center
-            setTimeout(() => {
-                const textCtx = canvas.getContext('2d');
-                textCtx.font = 'bold 20px Poppins, sans-serif';
-                textCtx.fillStyle = bgColor;
-                textCtx.textAlign = 'center';
-                textCtx.textBaseline = 'middle';
-                textCtx.fillText(progress + '%', canvas.width / 2, canvas.height / 2);
-            }, 300);
         });
     </script>
+
 
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

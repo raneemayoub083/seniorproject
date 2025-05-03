@@ -27,6 +27,18 @@ class Exam extends Model
         return $this->belongsTo(SectionSubjectTeacher::class);
     }
     
+
+    public function subject()
+    {
+        return $this->hasOneThrough(
+            Subject::class,
+            SectionSubjectTeacher::class,
+            'id',              // Foreign key on SectionSubjectTeacher
+            'id',              // Foreign key on Subject
+            'section_subject_teacher_id', // Local key on Exam
+            'subject_id'       // Local key on SectionSubjectTeacher
+        );
+    }
     public function teacherExams()
     {
         $teacherId = Auth::id(); // current logged-in teacher ID
@@ -61,4 +73,5 @@ class Exam extends Model
             ->withPivot('grade')
             ->withTimestamps();
     }
+   
 }
