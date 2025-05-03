@@ -134,4 +134,35 @@ class MessageController extends Controller
 
         return redirect()->route('chat.index', $request->receiver_id)->with('success', 'Message sent!');
     }
+    public function fetch(User $receiver)
+    {
+        $userId = auth()->id();
+
+        $messages = Message::where(function ($query) use ($userId, $receiver) {
+            $query->where('sender_id', $userId)->where('receiver_id', $receiver->id);
+        })->orWhere(function ($query) use ($userId, $receiver) {
+            $query->where('sender_id', $receiver->id)->where('receiver_id', $userId);
+        })->orderBy('created_at')->get(['sender_id', 'message']);
+
+        return response()->json($messages);
+    }
+    public function typing(Request $request)
+    {
+        $senderId = auth()->id();
+        $receiverId = $request->receiver_id;
+
+        cache()->put("typing_{$senderId}_to_{$receiverId}", now()->timestamp, now()->addSeconds(5)); // expires after 5 seconds
+
+        return response()->json(['status' => 'ok']);
+    }
+
+    public function typingStatus($receiverId)
+    {
+        $userId = auth()->id(); // me
+        $key = "typing_{$receiverId}_to_{$userId}"; // other user typing to me
+
+        $isTyping = cache()->has($key);
+
+        return response()->json(['typing' => $isTyping]);
+    }
 }

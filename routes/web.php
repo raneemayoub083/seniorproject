@@ -60,6 +60,11 @@ Route::get('/reset-password/{id}', ResetPassword::class)->name('reset-password')
 Route::middleware(['auth'])->group(function () {
     Route::get('/chat/{receiverId?}', [MessageController::class, 'index'])->name('chat.index');
     Route::post('/chat/send', [MessageController::class, 'send'])->name('chat.send');
+    Route::get('/chat/fetch/{receiver}', [MessageController::class, 'fetch'])->name('chat.fetch');
+    // routes/web.php
+    Route::post('/chat/typing', [MessageController::class, 'typing'])->name('chat.typing');
+    Route::get('/chat/typing-status/{receiver}', [MessageController::class, 'typingStatus'])->name('chat.typingStatus');
+
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::middleware(['auth', 'role:1'])->group(function () {
     // Dashboard Route

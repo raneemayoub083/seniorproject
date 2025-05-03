@@ -50,21 +50,25 @@
                                 {{ $message->message }}
                             </div>
                         </div>
+
+
                         @empty
                         <p class="text-center text-muted">No messages yet. Start the conversation!</p>
                         @endforelse
+                        <div id="typingIndicator" class="text-muted small ps-3 mb-2"></div>
                     </div>
 
                     @if ($receiver)
                     <div class="card-footer bg-light border-top-0">
-                        <form method="POST" action="{{ route('chat.send') }}">
+                        <form id="messageForm">
                             @csrf
                             <input type="hidden" name="receiver_id" value="{{ $receiver->id }}">
                             <div class="input-group">
-                                <input type="text" name="message" class="form-control rounded-start-pill" placeholder="Type your message..." required>
-                                <button class="btn btn-primary rounded-end-pill px-4" style="background-color: #3674B5;">Send</button>
+                                <input type="text" name="message" id="messageInput" class="form-control rounded-start-pill" placeholder="Type your message..." required>
+                                <button type="submit" class="btn btn-primary rounded-end-pill px-4" style="background-color: #3674B5;">Send</button>
                             </div>
                         </form>
+
                     </div>
                     @endif
                 </div>
@@ -75,3 +79,90 @@
     {{-- FontAwesome --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </x-layouts.app>
+@if ($receiver)
+<script>
+    const chatBox = document.getElementById('chatBox');
+    const form = document.getElementById('messageForm');
+    const messageInput = document.getElementById('messageInput');
+    const receiverId = "{{ $receiver->id }}";
+    const authId = JSON.parse('{{ auth()->id() }}');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const message = messageInput.value;
+
+        fetch("{{ route('chat.send') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message,
+                    receiver_id: receiverId
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                messageInput.value = '';
+                appendMessage(data.message, true);
+            });
+    });
+
+    function appendMessage(message, isSender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'd-flex mb-3 ' + (isSender ? 'justify-content-end' : 'justify-content-start');
+
+        const bubble = document.createElement('div');
+        bubble.className = 'p-2 px-3 rounded-pill text-white ' + (isSender ? 'bg-primary' : 'bg-secondary');
+        bubble.textContent = message;
+
+        messageDiv.appendChild(bubble);
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Poll for new messages every 3 seconds
+    setInterval(() => {
+        fetch(`/chat/fetch/{{ $receiver->id }}`)
+            .then(res => res.json())
+            .then(data => {
+                chatBox.innerHTML = '';
+                data.forEach(msg => {
+                    appendMessage(msg.message, msg.sender_id == authId);
+                });
+            });
+    }, 3000);
+
+    // Typing logic
+    let typingTimeout;
+    messageInput.addEventListener('input', () => {
+        clearTimeout(typingTimeout);
+
+        fetch("{{ route('chat.typing') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                receiver_id: receiverId
+            })
+        });
+
+        // Prevent flooding the server
+        typingTimeout = setTimeout(() => {}, 1000);
+    });
+
+    // Poll typing status every 1s
+    setInterval(() => {
+        fetch(`/chat/typing-status/{{ $receiver->id }}`)
+            .then(res => res.json())
+            .then(data => {
+                typingIndicator.innerHTML = data.typing ? '<em>Typing...</em>' : '';
+            });
+    }, 1000);
+</script>
+@endif
