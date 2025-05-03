@@ -20485,8 +20485,8 @@ label,
 }
 
 .icon-sm {
-  width: 32px;
-  height: 32px;
+  width: 50px;
+  height: 50px;
 }
 .icon-sm i {
   top: 2px;
@@ -21064,7 +21064,8 @@ hr.horizontal.gray-light {
   padding-left: 1rem;
   padding-right: 1rem;
   font-weight: 500;
-  color: #67748e;
+  font-size:16px;
+  color: #3674B5;
 }
 .navbar-vertical .navbar-nav .nav-link > i {
   min-width: 1.8rem;
@@ -21160,6 +21161,7 @@ hr.horizontal.gray-light {
 .navbar-vertical.navbar-expand-xs .navbar-nav > .nav-item > .nav-link .icon svg .color-foreground {
   fill: #141727;
 }
+
 .navbar-vertical.navbar-expand-xs .lavalamp-object {
   width: calc(100% - 1rem) !important;
   background: theme-color("primary");
@@ -21779,6 +21781,7 @@ hr.horizontal.gray-light {
 .navbar-vertical .navbar-nav > .nav-item .nav-link.active .icon svg .color-foreground {
   fill: #fff;
 }
+
 
 .navbar-main {
   transition: box-shadow 0.25s ease-in, background-color 0.25s ease-in;

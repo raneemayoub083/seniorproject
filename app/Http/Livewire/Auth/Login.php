@@ -20,43 +20,39 @@ class Login extends Component
     public function mount()
     {
         if (auth()->check()) {
-            $user = auth()->user();  // Get the currently authenticated user
-            $role_id = $user->role_id;  // Get the role_id of the currently authenticated user
+            $user = auth()->user();
 
-            // Check if the user is an admin (assuming role_id for admin is 1)
-            if ($role_id == 1) {
-                return redirect()->route('dashboard');  // Redirect to admin dashboard
-            }
-
-            // Check if the user is a teacher (assuming role_id for teacher is 2)
-            if ($role_id == 2) {
-                return redirect()->route('teacherdash.dashboard');  // Redirect to teacher dashboard
-            }
-            if($role_id == 3){
-                return redirect()->route('studentdash.dashboard');
-            }
-
-         
+            return match ($user->role_id) {
+                1 => redirect()->route('dashboard'),
+                2 => redirect()->route('teacherdash.dashboard'),
+                3 => redirect()->route('studentdash.dashboard'),
+                4 => redirect()->route('parentdash.dashboard'),
+                default => abort(403),
+            };
         }
-
-        $this->fill(['email' => 'admin2@school.com', 'password123' => 'secret']);
     }
+
 
     public function login()
     {
         $this->validate();
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember_me)) {
-            $user = User::where('email', $this->email)->first();
-            Auth::login($user, $this->remember_me);
+            $user = Auth::user(); // already logged in
 
-            // Trigger SweetAlert for success
-            $this->dispatch('login-success');
+            // Role-based redirect
+            return match ($user->role_id) {
+                1 => redirect()->route('dashboard'),                // Admin
+                2 => redirect()->route('teacherdash.dashboard'),    // Teacher
+                3 => redirect()->route('studentdash.dashboard'),    // Student
+                4 => redirect()->route('parentdash.dashboard'),     // Parent (if added)
+                default => abort(403, 'Unknown role'),
+            };
         } else {
-            // Trigger SweetAlert for failure
             $this->dispatch('login-failed');
         }
     }
+
 
     public function render()
     {

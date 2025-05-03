@@ -39,4 +39,8 @@ class Student extends Model
             ->withPivot('grade')
             ->withTimestamps();
     }
+    public function parent()
+    {
+        return $this->belongsTo(StudentParent::class, 'parent_id');
+    }
 }

@@ -23,23 +23,21 @@ use App\Http\Controllers\ExamController;
 use App\Exports\StudentsExport;
 use App\Http\Controllers\NotificationController;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Livewire\Billing;
-use App\Http\Livewire\Profile;
-use App\Http\Livewire\Tables;
-use App\Http\Livewire\StaticSignIn;
-use App\Http\Livewire\StaticSignUp;
-use App\Http\Livewire\Rtl;
+
 
 use App\Http\Livewire\LaravelExamples\UserProfile;
 use App\Http\Livewire\LaravelExamples\UserManagement;
-use App\Models\AcademicYear;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |----------------------------------------------------------------------
 | Web Routes
 |----------------------------------------------------------------------
 */
+
+
 
 Route::get('/', function () {
     return view('client.index');
@@ -60,7 +58,9 @@ Route::get('/reset-password/{id}', ResetPassword::class)->name('reset-password')
 
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
+    Route::get('/redirect-based-on-role', \App\Http\Controllers\RoleRedirectController::class);
     Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::middleware(['auth', 'role:1'])->group(function () {
     // Dashboard Route
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::post('/exams', [ExamController::class, 'store'])->name('exams.store');
@@ -105,9 +105,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/teachers/destroy', [TeacherController::class, 'destroy'])->name('teacher.destroy');
         Route::post('/assign-teacher', [SubjectController::class, 'assignTeacher'])->name('assign.teacher');
         Route::post('/teachers/update-status/{id}', [TeacherController::class, 'updateStatus']);
-
-  
+    });
         // Teacher dashboard route
+        Route::middleware(['auth', 'role:2'])->group(function () {
         Route::get('/teacher/dashboard', [TeacherController::class, 'showDashboard'])->name('teacherdash.dashboard');
 
         Route::get('/teacher/classes', [TeacherController::class, 'showClasses'])->name('teacherdash.classes');
@@ -131,8 +131,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lessons/store', [LessonController::class, 'store'])->name('lessons.store');
     Route::get('/lessons/{sectionId}', [LessonController::class, 'showLessonsBySection'])
         ->name('lessons.bySection');
-            
-    // Teacher dashboard route
+});
+    Route::middleware(['auth', 'role:3'])->group(function () {
+    // Student dashboard route
     Route::get('/student/dashboard', [StudentController::class, 'showDashboard'])->name('studentdash.dashboard');
     Route::get('/student/classes', [StudentController::class, 'showClasses'])->name('studentdash.classes');
     Route::get('/student/activeclass', [StudentController::class, 'showActiveClass'])->name('studentdash.activeclass');
@@ -144,4 +145,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student/grades/{section}', [StudentController::class, 'viewGrades'])->name('studentdash.viewGrades');
     Route::get('/student/attendance/{section}', [StudentController::class, 'attendanceCalendar'])->name('student.attendance.calendar');
     Route::get('/student/attendance/events/{section}', [StudentController::class, 'attendanceEvents'])->name('student.attendance.events');
+    });
+    Route::middleware(['auth', 'role:4'])->group(function () {
+    Route::get('/parent/dashboard', function () {
+        return view('parentdash.dashboard');
+    })->name('parentdash.dashboard');
+    });
 });

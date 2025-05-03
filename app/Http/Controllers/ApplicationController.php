@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\StudentParent; // This is your renamed parent model
+
+
 use Twilio\Rest\Client;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -211,56 +214,73 @@ class ApplicationController extends Controller
                 $section = Section::create([
                     'academic_year_id' => $application->academic_year_id,
                     'grade_id' => $application->grade_id,
-                    'capacity' => 1,  // Set the initial capacity to 1
-                    'status' => 'active',  // Set the section status to active
+                    'capacity' => 1,
+                    'status' => 'active',
                 ]);
             } else {
-                // If section exists, just update the capacity
                 $section->increment('capacity', 1);
             }
 
-            // Attach the application to the section (many-to-many relation)
+            // Attach the application to the section
             $section->applications()->attach($application->id);
 
-            // Generate Email and Password
+            // Generate student credentials
             $email = strtolower($application->first_name . '.' . $application->last_name . '@school.com');
-            $password = Str::random(10);  // Generate a random password
+            $password = Str::random(10);
 
-            // Create User with the generated credentials
             $user = User::create([
                 'name' => $application->first_name . ' ' . $application->last_name,
                 'email' => $email,
-                'password' => bcrypt($password),  // Encrypt the password
-                'role_id' => 3, // Assuming role_id 3 is for 'Student'
+                'password' => bcrypt($password),
+                'role_id' => 3, // Student
             ]);
 
-            // Create Student record and attach to section with academic year
+            // Create student
             $student = Student::create([
                 'user_id' => $user->id,
                 'application_id' => $application->id,
-                'status' => 'active',  // Set student status to active
+                'status' => 'active',
             ]);
 
-            // Attach the student to the section with the academic year
             $student->sections()->attach($section->id, ['academic_year_id' => $application->academic_year_id]);
 
-            // Send WhatsApp message to the parent for approval
+            // ✅ Create parent account
+            $parentEmail = strtolower('parent.' . $application->first_name . '.' . $application->last_name . '@school.com');
+            $parentPassword = Str::random(10);
+
+            $parentUser = User::create([
+                'name' => 'Parent of ' . $application->first_name,
+                'email' => $parentEmail,
+                'password' => bcrypt($parentPassword),
+                'role_id' => 4, // Parent
+            ]);
+
+            $studentParent = StudentParent::create([
+                'user_id' => $parentUser->id,
+                'phone_number' => $application->parents_contact_numbers,
+            ]);
+
+            // ✅ Link student to parent
+            $student->parent_id = $studentParent->id;
+            $student->save();
+
+            // ✅ Send WhatsApp message
             try {
-                // Initialize Twilio client
                 $twilio = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
 
-                // Compose the approval message
-                $message = "Your application has been approved.\n\n" .
-                    "Student: " . $application->first_name . ' ' . $application->last_name . "\n" .
-                    "Email: " . $email . "\n" .
-                    "Password: " . $password . "\n\n" .
+                $message = "🎉 Your application has been approved!\n\n" .
+                    "👧 Student Account:\n" .
+                    "Email: $email\n" .
+                    "Password: $password\n\n" .
+                    "👨‍👩‍👧 Parent Account:\n" .
+                    "Email: $parentEmail\n" .
+                    "Password: $parentPassword\n\n" .
                     "Please use these credentials to log in.";
 
-                // Send WhatsApp message
                 $twilio->messages->create(
-                    'whatsapp:' . $application->parents_contact_numbers, // Parent's WhatsApp number
+                    'whatsapp:' . $application->parents_contact_numbers,
                     [
-                        'from' => env('TWILIO_WHATSAPP_NUMBER'), // Your Twilio WhatsApp number
+                        'from' => env('TWILIO_WHATSAPP_NUMBER'),
                         'body' => $message,
                     ]
                 );
@@ -268,26 +288,21 @@ class ApplicationController extends Controller
                 Log::error('Failed to send WhatsApp message: ' . $e->getMessage());
             }
 
-            return redirect()->back()->with('success', 'Application approved and student account created successfully.');
+            return redirect()->back()->with('success', 'Application approved and accounts created successfully.');
         }
 
-        // If status is 'rejected', send an apology message
         if ($status == 'rejected') {
-            // Compose the rejection message
             $message = "We regret to inform you that your application has been rejected.\n\n" .
                 "We appreciate your interest and encourage you to apply again in the future.\n\n" .
                 "If you have any questions, feel free to reach out to us.";
 
-            // Send WhatsApp message to the parent for rejection
             try {
-                // Initialize Twilio client
                 $twilio = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
 
-                // Send WhatsApp message
                 $twilio->messages->create(
-                    'whatsapp:' . $application->parents_contact_numbers, // Parent's WhatsApp number
+                    'whatsapp:' . $application->parents_contact_numbers,
                     [
-                        'from' => env('TWILIO_WHATSAPP_NUMBER'), // Your Twilio WhatsApp number
+                        'from' => env('TWILIO_WHATSAPP_NUMBER'),
                         'body' => $message,
                     ]
                 );
@@ -295,10 +310,9 @@ class ApplicationController extends Controller
                 Log::error('Failed to send WhatsApp message: ' . $e->getMessage());
             }
 
-            return redirect()->back()->with('success', 'Application rejected. Apology message sent to the parent.');
+            return redirect()->back()->with('success', 'Application rejected. Apology message sent.');
         }
 
-        // For other statuses, just return the success message
         return redirect()->back()->with('success', 'Application status updated successfully.');
     }
 }

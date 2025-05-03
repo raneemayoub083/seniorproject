@@ -49,6 +49,51 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize font-weight-bold">Pending Applications</p>
+                                        <h2 class="font-weight-bolder mb-0">
+                                            {{ $pendingApplicationCount }}
+                                            <span class="text-warning text-sm font-weight-bolder">Pending</span>
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-warning shadow text-center border-radius-md">
+                                        <img width="48" height="48" src="https://img.icons8.com/color/48/edit-property.png" alt="pending-applications" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-capitalize font-weight-bold">Open Sections</p>
+                                        <h2 class="font-weight-bolder mb-0">
+                                            {{ $openSectionCount }}
+                                            <span class="text-info text-sm font-weight-bolder">This Year</span>
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-info shadow text-center border-radius-md">
+                                        <img width="48" height="48" src="https://img.icons8.com/color/48/classroom.png" alt="open-section" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Calendar Section -->
@@ -71,6 +116,23 @@
 
                         <div id="calendar"></div>
                     </div>
+                </div>
+                <div class="col-4">
+                    @if($academicYear)
+                    <div class="card shadow-lg border-0" style="border-radius: 1rem;">
+                        <div class="card-body text-center py-4">
+                            <h6 class="text-uppercase text-secondary mb-2">
+                                Academic Year Progress — {{ $academicYear->name }}
+                            </h6>
+
+                            <canvas id="academicProgressChart" width="160" height="160"></canvas>
+                            <p class="text-muted mt-3 mb-0 small">
+                                {{ \Carbon\Carbon::parse($academicYear->start_date)->format('M d, Y') }}
+                                → {{ \Carbon\Carbon::parse($academicYear->end_date)->format('M d, Y') }}
+                            </p>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
             <!-- Add Exam Modal -->
@@ -366,6 +428,55 @@
     @endpush
 
     @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('academicProgressChart');
+            const ctx = canvas.getContext('2d');
+
+            const progress = JSON.parse('{!! json_encode($academicYearProgress) !!}');
+            const bgColor = progress >= 100 ? '#28a745' : (progress <= 0 ? '#dc3545' : '#3674B5');
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [progress, 100 - progress],
+                        backgroundColor: [bgColor, '#e9ecef'],
+                        borderWidth: 4,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    cutout: '72%',
+                    animation: {
+                        animateRotate: true,
+                        duration: 1200,
+                        easing: 'easeOutBounce'
+                    },
+                    plugins: {
+                        tooltip: {
+                            enabled: false
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Add large % label in center
+            setTimeout(() => {
+                const textCtx = canvas.getContext('2d');
+                textCtx.font = 'bold 20px Poppins, sans-serif';
+                textCtx.fillStyle = bgColor;
+                textCtx.textAlign = 'center';
+                textCtx.textBaseline = 'middle';
+                textCtx.fillText(progress + '%', canvas.width / 2, canvas.height / 2);
+            }, 300);
+        });
+    </script>
+
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- FullCalendar JS -->
@@ -533,13 +644,13 @@
                 const formData = new FormData(addExamForm);
 
                 fetch("{{ route('exams.store') }}", {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Accept': 'application/json',
-                            },
-                        })
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                        },
+                    })
                     .then(async response => {
                         if (!response.ok) {
                             const errorData = await response.json();
