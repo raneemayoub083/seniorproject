@@ -175,72 +175,135 @@
 </style>
 <script>
     window.addEventListener('DOMContentLoaded', () => {
+        const synth = window.speechSynthesis;
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-        if (SpeechRecognition) {
-            const recognition = new SpeechRecognition();
-            recognition.continuous = true;
-            recognition.lang = 'en-US';
-
-            // Helper: Check if all keywords exist in transcript
-            function has(words, transcript) {
-                return words.every(word => transcript.includes(word));
-            }
-
-            recognition.onresult = function(event) {
-                const transcript = event.results[event.resultIndex][0].transcript.trim().toLowerCase();
-                console.log('🎧 Heard:', transcript);
-
-                if (has(['enter', 'dashboard'], transcript)) {
-                    window.location.href = "{{ route('studentdash.dashboard') }}";
-                } else if (has(['enter', 'classes'], transcript)) {
-                    window.location.href = "{{ route('studentdash.classes') }}";
-                } else if (has(['enter', 'active', 'class'], transcript)) {
-                    window.location.href = "{{ route('studentdash.activeclass') }}";
-                } else if (/enter.*lesson/i.test(transcript)) {
-                    const cleanedTranscript = transcript
-                        .replace(/enter/, '')
-                        .replace(/lessons?/, '')
-                        .replace(/[^a-zA-Z ]/g, '')
-                        .trim();
-
-                    console.log('🎤 Voice Input Detected:', `"${cleanedTranscript}"`);
-
-                    let matched = false;
-
-                    document.querySelectorAll('.custom-option').forEach(option => {
-                        const name = option.querySelector('.main')?.textContent.trim().toLowerCase();
-                        const normalizedName = name?.replace(/[^a-zA-Z ]/g, '').trim();
-
-                        console.log('🔍 Checking against subject:', `"${normalizedName}"`);
-
-                        if (normalizedName && cleanedTranscript && normalizedName.includes(cleanedTranscript)) {
-                            const form = option.querySelector('form');
-                            if (form) {
-                                form.submit();
-                                console.log(`✅ Matched and submitted: "${normalizedName}"`);
-                                matched = true;
-                            }
-                        }
-                    });
-
-                    if (!matched) {
-                        console.warn('⚠️ No matching subject found for:', `"${cleanedTranscript}"`);
-                    }
-                } else {
-                    console.log('🔕 No action matched for:', transcript);
-                }
-            };
-
-            recognition.onerror = function(event) {
-                console.error('❌ Speech recognition error:', event);
-            };
-
-            recognition.start();
-            console.log('🎙️ Voice recognition started.');
-        } else {
-            alert("Speech recognition not supported in this browser.");
+        if (!SpeechRecognition || !synth) {
+            alert("Your browser does not support speech recognition or synthesis.");
+            return;
         }
+
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.lang = 'en-US';
+
+        let isListening = true;
+
+        function speak(text, callback) {
+            if (synth.speaking) synth.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'en-US';
+            utter.rate = 1;
+            utter.onend = () => {
+                if (callback) setTimeout(callback, 300);
+            };
+            synth.speak(utter);
+        }
+
+        function normalize(text) {
+            return text.toLowerCase().replace(/[^a-z\s]/gi, '').trim();
+        }
+
+        function has(words, transcript) {
+            return words.every(word => transcript.includes(word));
+        }
+
+        function restartRecognition() {
+            try {
+                recognition.stop();
+                setTimeout(() => {
+                    recognition.start();
+                }, 500);
+            } catch (e) {
+                console.warn('Recognition restart failed:', e.message);
+            }
+        }
+
+        function handleSubjectNavigation(transcript) {
+            const cleanedTranscript = normalize(
+                transcript
+                .replace(/enter|lessons|lesson|for|subject/gi, '')
+            );
+
+            console.log('🎯 Searching for subject:', `"${cleanedTranscript}"`);
+            let matched = false;
+
+            document.querySelectorAll('.custom-option').forEach(option => {
+                const name = option.querySelector('.main')?.textContent.trim().toLowerCase();
+                const normalizedName = normalize(name);
+
+                if (normalizedName.includes(cleanedTranscript)) {
+                    const form = option.querySelector('form');
+                    if (form) {
+                        matched = true;
+                        console.log(`✅ Matched: "${normalizedName}"`);
+                        speak(`Opening lessons for ${normalizedName}`, () => form.submit());
+                    }
+                }
+            });
+
+            if (!matched) {
+                speak(`I couldn't find the subject ${cleanedTranscript}. Please try again.`, () => {
+                    restartRecognition();
+                });
+            }
+        }
+
+        function processTranscript(transcript) {
+            const text = normalize(transcript);
+            console.log('🎧 Heard:', text);
+
+            if (has(['enter', 'dashboard'], text)) {
+                window.location.href = "{{ route('studentdash.dashboard') }}";
+
+            } else if (has(['enter', 'classes'], text)) {
+                window.location.href = "{{ route('studentdash.classes') }}";
+
+            } else if (has(['enter', 'active', 'class'], text)) {
+                window.location.href = "{{ route('studentdash.activeclass') }}";
+
+            } else if (text.includes('lesson')) {
+                handleSubjectNavigation(text);
+
+            } else if (has(['stop', 'listening'], text)) {
+                isListening = false;
+                recognition.stop();
+                speak("Listening stopped. Say start listening to resume.");
+
+            } else if (has(['start', 'listening'], text)) {
+                isListening = true;
+                recognition.start();
+                speak("Voice control resumed.");
+
+            } else {
+                speak("Sorry, I didn't understand that. Try saying: enter my classes or enter lessons for math.", () => {
+                    restartRecognition();
+                });
+            }
+        }
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[event.resultIndex][0].transcript;
+            processTranscript(transcript);
+        };
+
+        recognition.onerror = (event) => {
+            console.error('❌ Speech recognition error:', event);
+            if (event.error !== 'aborted') {
+                speak("There was an error. Please try again.", () => {
+                    restartRecognition();
+                });
+            }
+        };
+
+        // Greet and start
+        setTimeout(() => {
+            speak("Welcome to your class dashboard. You can say: enter my classes, enter my active class, or enter lessons for math or science.", () => {
+                recognition.start();
+            });
+        }, 800);
     });
 </script>
+
+
 @include('studentdash.sidebar')

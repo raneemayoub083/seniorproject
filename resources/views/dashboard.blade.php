@@ -570,6 +570,11 @@
                     .then(data => {
                         var modal = bootstrap.Modal.getInstance(document.getElementById('eventModal'));
                         modal.hide();
+
+                        // ✅ Fix stuck dark backdrop
+                        document.body.classList.remove('modal-open');
+                        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+
                         Swal.fire({
                             icon: 'success',
                             title: 'Success!',

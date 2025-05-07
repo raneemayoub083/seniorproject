@@ -1,4 +1,5 @@
 <x-layouts.app>
+
     <div class="container">
         <p class="mt-4" style="color:#729762;text-align:center;text-shadow:2px 2px 5px white;">
             <button data-text="Awesome" class="buttonpma">
@@ -48,7 +49,8 @@
                             @endif
                         </td>
                         <td>
-                            <a href="/teacher/exams"> <button class="view">
+                            <a href="{{ route('teacher.exams.bySection', ['sectionId' => $section->id]) }}">
+                                <button class="view">
                                     View Exams
                                     <svg fill="currentColor" viewBox="0 0 24 24" class="i">
                                         <path
@@ -118,9 +120,10 @@
     </div>
 
     <!-- jQuery -->
+   
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/smooth-scrollbar@8.6.3/dist/smooth-scrollbar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- DataTables JS -->

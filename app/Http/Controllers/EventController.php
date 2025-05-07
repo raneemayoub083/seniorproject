@@ -23,7 +23,7 @@ class EventController extends Controller
             'start' => 'required|date',
             'audience' => 'required|array',
         ]);
-        Event::create([
+        $event = Event::create([
             'title' => $request->title,
             'description' => $request->description,
             'start' => $request->start,
@@ -34,8 +34,10 @@ class EventController extends Controller
         Notification::create([
             'title' => $request->title,
             'message' => $request->description ?? '',
-            'audience' => json_encode($request->audience), // Save who should receive it
+            'audience' => json_encode($request->audience),
+            'event_id' => $event->id,
         ]);
+
 
         return response()->json(['message' => 'Event created successfully!']);
     }

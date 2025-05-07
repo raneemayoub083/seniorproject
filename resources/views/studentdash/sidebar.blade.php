@@ -2,6 +2,7 @@
 <button id="openSidebarBtn" class="fixed-btn">
     ☰
 </button>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- Sidebar -->
 <div id="sidebar" class="sidebar">
@@ -209,6 +210,32 @@
         </style>
 
         <script>
+            function forceStopAllRecognition() {
+                // Loop over all properties of the window to find any SpeechRecognition instances
+                for (const key in window) {
+                    if (window.hasOwnProperty(key)) {
+                        const obj = window[key];
+                        if (
+                            obj &&
+                            typeof obj === 'object' &&
+                            obj.constructor &&
+                            (obj.constructor.name === 'SpeechRecognition' || obj.constructor.name === 'webkitSpeechRecognition') &&
+                            typeof obj.stop === 'function'
+                        ) {
+                            try {
+                                obj.stop();
+                                console.log("🎤 Force-stopped recognition:", key);
+                            } catch (err) {
+                                console.warn("⚠️ Error stopping recognition:", err);
+                            }
+                        }
+                    }
+                }
+                if (speechSynthesis && speechSynthesis.speaking) {
+                    speechSynthesis.cancel();
+                    console.log("🔇 Speech synthesis cancelled.");
+                }
+            }
             let voices = [];
             let lastSpokenText = '';
 
@@ -310,6 +337,7 @@
 
                 openBtn.onclick = function() {
                     sidebar.style.width = "250px";
+                    forceStopAllRecognition(); // 💥 Force stops any live mic and speech
                 }
 
                 window.closeSidebar = function() {
@@ -427,11 +455,32 @@
                     const tensor = tf.tensor(landmarks, [1, 63], 'float32');
                     knnClassifier.addExample(tensor, label);
 
-                    document.getElementById('signLabelHidden').value = label;
-                    document.getElementById('landmarksHidden').value = JSON.stringify(landmarks);
-                    document.getElementById('saveSignForm').submit();
+                    await fetch("/signs/save", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            },
+                            body: JSON.stringify({
+                                label: label,
+                                landmarks: JSON.stringify(landmarks)
+                            })
+                        }).then(res => res.json())
+                        .then(data => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: data.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            document.getElementById("signLabelInput").value = '';
+                        }).catch(async (err) => {
+                            const errorText = await err?.response?.text?.() || err.message || 'Unknown error';
+                            Swal.fire("Error", errorText, "error");
+                            console.error("Fetch error:", err);
+                        });
 
-                    Swal.fire("Saving", `Sign \"${label}\" is being saved...`, "success");
+
                     console.log("✅ Trained and saved label:", label);
 
                     document.getElementById("signLabelInput").value = '';

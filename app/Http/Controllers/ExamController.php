@@ -7,6 +7,7 @@ use App\Models\Exam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Notification;
 
 class ExamController extends Controller
 {
@@ -30,13 +31,13 @@ class ExamController extends Controller
             'audience' => json_encode($request->audience),
         ]);
 
-        // Step 2: Create Exam linked to Event
+        // Step 2: Create Exam
         $exam = Exam::create([
             'event_id' => $event->id,
             'section_subject_teacher_id' => $request->section_subject_teacher_id,
         ]);
 
-        // Step 3: Attach students to exam_student_grades with null grade
+        // Step 3: Attach students
         $section = $exam->sectionSubjectTeacher->section;
         $students = $section ? $section->students : collect();
 
@@ -48,9 +49,24 @@ class ExamController extends Controller
             );
         }
 
-        // ✅ Response
+        // ✅ Step 4: Push Notifications
+
+        // Send to Teacher: Upload exam document reminder
+        Notification::create([
+            'title' => 'New Exam Created',
+            'message' => 'Please upload the document for: ' . $request->title,
+            'audience' => json_encode(['teachers']),
+        ]);
+
+        // Send to Students: Upcoming exam notification
+        Notification::create([
+            'title' => 'Upcoming Exam: ' . $request->title,
+            'message' => 'You have an exam scheduled on ' . \Carbon\Carbon::parse($request->start)->format('d M Y, h:i A'),
+            'audience' => json_encode(['students']),
+        ]);
+
         return response()->json([
-            'message' => 'Exam, Event, and student links created successfully!',
+            'message' => 'Exam, Event, and Notifications created successfully!',
         ]);
     }
 
@@ -121,5 +137,13 @@ class ExamController extends Controller
 
         return redirect()->route('teacherdash.exams.grades.form', $exam->id)
             ->with('success', 'Grades submitted successfully!');
+    }
+    public function viewBySection($sectionId)
+    {
+        $exams = Exam::whereHas('sectionSubjectTeacher', function ($query) use ($sectionId) {
+            $query->where('section_id', $sectionId);
+        })->with(['sectionSubjectTeacher.section.grade', 'sectionSubjectTeacher.subject', 'event'])->get();
+
+        return view('teacherdash.exams.index', compact('exams'));
     }
 }

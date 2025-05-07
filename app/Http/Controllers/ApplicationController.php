@@ -226,7 +226,9 @@ class ApplicationController extends Controller
 
             // Generate student credentials
             $email = strtolower($application->first_name . '.' . $application->last_name . '@school.com');
-            $password = Str::random(10);
+           $password = strtolower(Str::random(10));
+
+           
 
             $user = User::create([
                 'name' => $application->first_name . ' ' . $application->last_name,
@@ -246,7 +248,7 @@ class ApplicationController extends Controller
 
             // ✅ Create parent account
             $parentEmail = strtolower('parent.' . $application->first_name . '.' . $application->last_name . '@school.com');
-            $parentPassword = Str::random(10);
+            $parentPassword = strtolower(Str::random(10));
 
             $parentUser = User::create([
                 'name' => 'Parent of ' . $application->first_name,

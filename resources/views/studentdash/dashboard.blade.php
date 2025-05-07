@@ -36,44 +36,55 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-8">
-                <div class="row">
 
-                    <div class="col-6">
-                        <h1 style="color:#3674B5">ID card:</h1>
-                        <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
-                                    <div style="background-color:white;padding-top:10px">
-                                        <p class="heading_8264">Student-Vision Voice</p>
-                                        <img src="../assets/img/visionvoicelogo.png" class="logo" width="36" height="36">
+                <br>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div style="background-color:white;padding-top:10px">
+                                <p class="heading_8264">Student-Vision Voice</p>
+                                <img src="../assets/img/visionvoicelogo.png" class="logo" width="36" height="36">
 
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <image class="chip rounded-pill" id="image0" width="70" height="70" src="{{ Storage::url($student->application->profile_img) }}"></image>
-                                            </div>
-                                            <div class="col-8" style="text-align:left;">
-                                                <p class="ppp"><span style="font-size:1.4em !important">{{ $student->application->first_name }} {{ $student->application->last_name }}</span>
-                                                    <br>{{ $student->user->email }} <br>
-
-                                            </div>
-                                        </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <image class="chip rounded-pill" id="image0" width="70" height="70" src="{{ Storage::url($student->application->profile_img) }}"></image>
                                     </div>
-                                </div>
-                                <div class="flip-card-back">
-                                    <div class="strip">Vision Voice School</div>
-                                    <div class="mstrip">
-
-                                        <p>Email:Visionvoice@gmail.com
-                                            <br>Phone number:+961 70074639
-                                        </p>
+                                    <div class="col-8" style="text-align:left;">
+                                        <p class="ppp"><span style="font-size:1.4em !important">{{ $student->application->first_name }} {{ $student->application->last_name }}</span>
+                                            <br>{{ $student->user->email }} <br>
 
                                     </div>
-
                                 </div>
                             </div>
                         </div>
+                        <div class="flip-card-back">
+                            <div class="strip">Vision Voice School</div>
+                            <div class="mstrip">
+
+                                <p>Email:Visionvoice@gmail.com
+                                    <br>Phone number:+961 70074639
+                                </p>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mt-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Upcoming Exams & Events</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="dashboard-calendar"></div>
+                            </div>
+                        </div>
+                        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+                        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+
                     </div>
                 </div>
 
@@ -84,6 +95,10 @@
                 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 </x-layouts.app>
 <style>
+    h5 {
+        color: white;
+    }
+
     .flip-card {
         background-color: transparent;
         width: 240px;
@@ -222,11 +237,13 @@
     }
 
     .flip-card-front {
+        margin-left: 70px;
         box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
         background-color: #3674B5;
     }
 
     .flip-card-back {
+        margin-left: -70px;
         box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
         background-color: #3674B5;
         transform: rotateY(180deg);
@@ -406,4 +423,187 @@
         }
     });
 </script>
+<style>
+    #dashboard-calendar {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .fc-toolbar-title {
+        font-size: 1.25rem;
+    }
+</style>
+
+<script>
+   
+
+    let calendarInstance = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('dashboard-calendar');
+
+        calendarInstance = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            height: 'auto',
+            events: '/calendar/events',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+            eventColor: '#0d6efd',
+            eventDisplay: 'block',
+            eventClick: function(info) {
+                const event = info.event;
+                Swal.fire({
+                    title: event.title,
+                    html: `
+                        <p><strong>Date:</strong> ${event.start.toLocaleDateString()}</p>
+                        ${event.extendedProps.description ? `<p><strong>Description:</strong> ${event.extendedProps.description}</p>` : ''}
+                        ${event.extendedProps.type ? `<p><strong>Type:</strong> ${event.extendedProps.type}</p>` : ''}
+                    `,
+                    icon: 'info',
+                    confirmButtonColor: '#3674B5',
+                    confirmButtonText: 'Close'
+                });
+            }
+        });
+
+        calendarInstance.render();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const synth = window.speechSynthesis;
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition || !synth) {
+            alert("Speech features are not supported in your browser.");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        let active = true;
+
+        function speak(text, callback) {
+            if (synth.speaking) synth.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'en-US';
+            utter.rate = 1;
+            if (callback) utter.onend = () => setTimeout(callback, 400);
+            synth.speak(utter);
+        }
+
+        function getCalendarEvents() {
+            return calendarInstance ? calendarInstance.getEvents() : [];
+        }
+
+        function speakCalendarEvents(callback) {
+            const events = getCalendarEvents();
+            const now = new Date();
+            const upcoming = events.filter(e => e.start >= now);
+
+            if (upcoming.length === 0) {
+                speak("You have no upcoming events.", callback);
+                return;
+            }
+
+            let message = "Here are your upcoming events: ";
+            upcoming.slice(0, 5).forEach(event => {
+                const title = event.title;
+                const date = new Date(event.start).toLocaleDateString();
+                message += `${title} on ${date}. `;
+            });
+
+            speak(message, callback);
+        }
+
+        function speakEventsOnSpecificDate(dateStr, callback) {
+            const events = getCalendarEvents();
+            const inputDate = new Date(dateStr);
+
+            if (isNaN(inputDate.getTime())) {
+                speak("I couldn't understand the date you said. Please try again.", callback);
+                return;
+            }
+
+            const matchingEvents = events.filter(e => {
+                return new Date(e.start).toDateString() === inputDate.toDateString();
+            });
+
+            if (matchingEvents.length === 0) {
+                speak(`You have no events on ${inputDate.toDateString()}.`, callback);
+                return;
+            }
+
+            let message = `On ${inputDate.toDateString()}, you have: `;
+            matchingEvents.forEach(event => {
+                message += `${event.title}. `;
+            });
+
+            speak(message, callback);
+        }
+
+        function handleDashboardCommand(transcript) {
+            transcript = transcript.toLowerCase();
+
+            if (transcript.includes("stop") || transcript.includes("exit")) {
+                active = false;
+                speak("Voice assistant stopped.");
+                return;
+            }
+
+            if (transcript.includes("calendar") || transcript.includes("events") || transcript.includes("upcoming")) {
+                document.getElementById('dashboard-calendar')?.scrollIntoView({
+                    behavior: 'smooth'
+                });
+                speak("Reading your upcoming events now.", () => {
+                    speakCalendarEvents(startListening);
+                });
+            } else if (transcript.includes("enter my classes")) {
+                speak("Entering your classes.", () => {
+                    window.location.href = "{{ route('studentdash.classes') }}";
+                });
+            } else if (transcript.includes("enter my active class")) {
+                speak("Opening your active class.", () => {
+                    window.location.href = "{{ route('studentdash.activeclass') }}";
+                });
+            } else {
+                const dateMatch = transcript.match(/(?:on )?(january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2}/i);
+                if (dateMatch) {
+                    const spokenDate = new Date(`${dateMatch[0]} ${new Date().getFullYear()}`);
+                    speakEventsOnSpecificDate(spokenDate, startListening);
+                } else {
+                    speak("Sorry, I didn’t understand. You can say: read my calendar, enter my classes, or enter my active class.", startListening);
+                }
+            }
+        }
+
+        function startListening() {
+            if (!active) return;
+
+            recognition.start();
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                console.log("🎤 Heard:", transcript);
+                handleDashboardCommand(transcript);
+            };
+
+            recognition.onerror = () => {
+                speak("Sorry, please say that again.", startListening);
+            };
+        }
+
+        setTimeout(() => {
+            speak("Welcome to your dashboard. You can say: read my calendar, enter my classes, or enter my active class.", startListening);
+        }, 1000);
+    });
+</script>
+
+
+
+
 @include('studentdash.sidebar')

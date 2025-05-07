@@ -1,4 +1,5 @@
 <x-layouts.app>
+
     <div class="container">
         <p class="mt-4 text-center" style="color:#729762; text-shadow:2px 2px 5px white;">
             <button data-text="Awesome" class="buttonpma">
@@ -47,11 +48,11 @@
                         <!-- Loaded dynamically -->
                     </div>
                     <div class="modal-footer">
-                       
+
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary w-100">Save Attendance</button>
                         </div>
-                    
+
 
                     </div>
                 </div>

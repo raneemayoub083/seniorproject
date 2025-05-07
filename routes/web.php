@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\DisabilityController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\BrailleController;
 use App\Http\Controllers\EventController; 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CameraController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ExamController;
 use App\Exports\StudentsExport;
@@ -30,6 +32,7 @@ use App\Http\Livewire\LaravelExamples\UserManagement;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 /*
 |----------------------------------------------------------------------
@@ -50,6 +53,10 @@ Route::get('/one-step-left', function () {
     return view('client.one-step-left');
 })->name('one-step-left');
 
+
+Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
+
+
 // Authentication Routes
 Route::get('/sign-up', SignUp::class)->name('sign-up');
 Route::get('/login', Login::class)->name('login');
@@ -64,6 +71,17 @@ Route::middleware(['auth'])->group(function () {
     // routes/web.php
     Route::post('/chat/typing', [MessageController::class, 'typing'])->name('chat.typing');
     Route::get('/chat/typing-status/{receiver}', [MessageController::class, 'typingStatus'])->name('chat.typingStatus');
+    Route::get('/calendar', [App\Http\Controllers\CalendarController::class, 'index'])->name('calendar.view');
+    Route::get('/calendar/events', [App\Http\Controllers\CalendarController::class, 'fetch']);
+
+    Route::view('/camera-test/student', 'camera.student')->name('camera.student');
+    Route::get('/camera-test/parent', [ParentDashboardController::class, 'cameraViewer'])->name('camera.parent');
+
+    Route::post('/camera/send-signal', [CameraController::class, 'storeSignal']);
+    Route::get('/camera/get-signal/{studentId}', [CameraController::class, 'getSignal']);
+    Route::get('/camera/check-request/{studentId}', [CameraController::class, 'checkRequest']);
+
+    Route::post('/camera/request/{studentId}', [CameraController::class, 'requestCamera']);
 
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::middleware(['auth', 'role:1'])->group(function () {
@@ -117,7 +135,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/teacher/dashboard', [TeacherController::class, 'showDashboard'])->name('teacherdash.dashboard');
 
         Route::get('/teacher/classes', [TeacherController::class, 'showClasses'])->name('teacherdash.classes');
-    Route::get('/teacher/exams', [ExamController::class, 'teacherExams'])->name('teacher.exams');
+        Route::get('/teacher/exams/section/{sectionId}', [ExamController::class, 'viewBySection'])
+            ->name('teacher.exams.bySection');
+
 
     // Upload exam document
     Route::post('/teacher/exams/upload/{exam}', [ExamController::class, 'uploadDocument'])->name('teacher.exams.upload');
@@ -155,6 +175,8 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::middleware(['auth', 'role:4'])->group(function () {
         Route::get('/parent/dashboard', [ParentDashboardController::class, 'index'])->middleware(['auth'])->name('parentdash.dashboard');
-
+  Route::get('/parent/classes', [ParentDashboardController::class, 'classesPage'])->name('parentdash.classes');
+    Route::get('/parent/classes/{studentId}', [ParentDashboardController::class, 'fetchStudentClasses'])->name('parentdash.classes.fetch');
+        Route::post('/parent/subject-info', [ParentDashboardController::class, 'getSubjectInfo']);
     });
 });

@@ -21,4 +21,9 @@ class Event extends Model
     protected $casts = [
         'audience' => 'array', // because you are saving multiple audiences (json)
     ];
+
+public function exam()
+{
+    return $this->hasOne(Exam::class);
+}
 }

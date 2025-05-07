@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     @if (env('IS_DEMO'))
-        <x-demo-metas></x-demo-metas>
+    <x-demo-metas></x-demo-metas>
     @endif
 
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/visionvoicelogo.png') }}">
@@ -30,6 +30,7 @@
     <link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/soft-ui-dashboard.css?v=1') }}" rel="stylesheet" id="pagestyle" />
 
+
     <!-- Font Awesome Kit -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 
@@ -42,11 +43,11 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- External JS -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
 
     <!-- Local Core JS -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>

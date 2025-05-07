@@ -15,7 +15,7 @@
         <source src="{{ asset('assets/videos/hero.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-      
+
 
       <div class="container position-relative" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-5 justify-content-between">
@@ -43,7 +43,7 @@
             <div class="col-md-6 col-lg-3">
               <div class="head1" style="background-image:url('./assets/img/head2.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
                 <p class="heading">Blind Students Support</p>
-               <p></p>
+                <p></p>
               </div>
             </div><!-- End Card 2 -->
 
@@ -51,7 +51,7 @@
             <div class="col-md-6 col-lg-3">
               <div class="head1" style="background-image:url('./assets/img/head3.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
                 <p class="heading">Non Verbal Students Support</p>
-              <p></p>
+                <p></p>
               </div>
             </div><!-- End Card 3 -->
 
@@ -71,7 +71,7 @@
           <!-- Section Title -->
           <div class="container section-title" data-aos="fade-up">
             <h2>About Us<br></h2>
-            <p>At UFS , we are dedicated to fostering a vibrant academic community. Established in 2024,
+            <p>At Vision Voice , we are dedicated to fostering a vibrant academic community. Established in 2024,
               our institution of excellence in education, research, and community service.</p>
           </div><!-- End Section Title -->
 
@@ -80,8 +80,11 @@
             <div class="row gy-4">
               <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
                 <h3>Our Mission</h3>
-                <img src="assets/img/about.jpg" class="img-fluid rounded-4 mb-4" alt="">
-                <p>Our mission is to provide a transformative education that equips students with the knowledge, skills, and values necessary to excel in a rapidly changing world. We are committed to nurturing intellectual curiosity, promoting lifelong learning, and preparing graduates to become leaders and innovators in their fields.</p>
+                <video autoplay loop muted playsinline class="img-fluid rounded-4 mb-4" alt="">
+                  <source src="{{ asset('assets/videos/video2.mp4') }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <p>VisionVoice, a smart school management system designed to empower blind, nonverbal, and paralyzed students. Our goal is to provide them with an inclusive, AI-powered educational environment that enhances accessibility, communication, and independence.</p>
               </div>
               <div class="col-lg-6" data-aos="fade-up" data-aos-delay="250">
                 <div class="content ps-0 ps-lg-5">
@@ -89,12 +92,12 @@
                     Academic Excellence
                   </p>
                   <ul>
-                    <li><i class="bi bi-check-circle-fill"></i> <span>Wide range of undergraduate, graduate, and professional programs including the arts, sciences, business, engineering, and health sciences.</span></li>
-                    <li><i class="bi bi-check-circle-fill"></i> <span>Bring real-world experience into the classroom, ensuring that our students receive a high-quality education.</span></li>
-                    <li><i class="bi bi-check-circle-fill"></i> <span>Our faculty members are distinguished scholars and practitioners.</span></li>
+                    <li><i class="bi bi-check-circle-fill"></i> <span>At its core, VisionVoice harnesses the power of artificial intelligence, voice recognition, speech synthesis, and gesture-based interaction to break communication barriers and support independent learning.</span></li>
+                    <li><i class="bi bi-check-circle-fill"></i> <span>Our mission is to amplify the voices of those often unheard, ensuring every student—regardless of ability—can fully participate, engage, and thrive in their educational journey.</span></li>
+                    <li><i class="bi bi-check-circle-fill"></i> <span> From navigating lessons with voice commands to real-time attendance, calendar updates, and personalized class interactions, every feature is crafted with accessibility in mind.</span></li>
                   </ul>
                   <p>
-                    Our university is a hub of research and innovation.We encourage collaboration across
+                    Our School is a hub of research and innovation.We encourage collaboration across
                     disciplines and with industry partners to address global challenges and drive progress.
                   </p>
 
@@ -184,8 +187,8 @@
                     <div class="stats-item d-flex">
                       <i class="bi bi-emoji-smile flex-shrink-0"></i>
                       <div>
-                        <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
-                        <p><strong>Happy Clients</strong> <span>consequuntur quae</span></p>
+                        <span data-purecounter-start="0" data-purecounter-end="500" data-purecounter-duration="1" class="purecounter"></span>
+                        <p><strong>Empowered Students</strong> <span>blind, nonverbal, and paralyzed learners thriving with AI</span></p>
                       </div>
                     </div>
                   </div><!-- End Stats Item -->
@@ -194,8 +197,8 @@
                     <div class="stats-item d-flex">
                       <i class="bi bi-journal-richtext flex-shrink-0"></i>
                       <div>
-                        <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
-                        <p><strong>Projects</strong> <span>adipisci atque cum quia aut</span></p>
+                        <span data-purecounter-start="0" data-purecounter-end="1200" data-purecounter-duration="1" class="purecounter"></span>
+                        <p><strong>Accessible Lessons</strong> <span>AI-enhanced content delivered inclusively</span></p>
                       </div>
                     </div>
                   </div><!-- End Stats Item -->
@@ -204,8 +207,8 @@
                     <div class="stats-item d-flex">
                       <i class="bi bi-headset flex-shrink-0"></i>
                       <div>
-                        <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1" class="purecounter"></span>
-                        <p><strong>Hours Of Support</strong> <span>aut commodi quaerat</span></p>
+                        <span data-purecounter-start="0" data-purecounter-end="10000" data-purecounter-duration="1" class="purecounter"></span>
+                        <p><strong>AI-Assisted Interactions</strong> <span>spoken commands and responses handled</span></p>
                       </div>
                     </div>
                   </div><!-- End Stats Item -->
@@ -214,13 +217,14 @@
                     <div class="stats-item d-flex">
                       <i class="bi bi-people flex-shrink-0"></i>
                       <div>
-                        <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1" class="purecounter"></span>
-                        <p><strong>Hard Workers</strong> <span>rerum asperiores dolor</span></p>
+                        <span data-purecounter-start="0" data-purecounter-end="75" data-purecounter-duration="1" class="purecounter"></span>
+                        <p><strong>Team & Volunteers</strong> <span>driven by purpose, innovation, and accessibility</span></p>
                       </div>
                     </div>
                   </div><!-- End Stats Item -->
 
                 </div>
+
 
               </div>
 
@@ -234,14 +238,14 @@
         <section id="call-to-action" class="call-to-action section dark-background">
 
           <div class="container">
-            <img src="assets/img/cta-bg.jpg" alt="">
+            <img src="assets/img/cta-bg.jpg" alt="VisionVoice empowering education background">
             <div class="content row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
               <div class="col-xl-10">
                 <div class="text-center">
-                  <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox play-btn"></a>
-                  <h3>Call To Action</h3>
-                  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                  <a class="cta-btn" href="#">Call To Action</a>
+                  <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox play-btn" aria-label="Watch our mission video"></a>
+                  <h3>Empower Every Voice</h3>
+                  <p>At VisionVoice, we believe every student deserves a voice. Our AI-powered smart school system breaks down barriers for blind, nonverbal, and paralyzed students, offering tools for communication, learning, and independence. Join us in shaping a more inclusive future for education.</p>
+                  <a class="cta-btn" href="#contact">Get Involved</a>
                 </div>
               </div>
             </div>
@@ -249,102 +253,101 @@
 
         </section><!-- /Call To Action Section -->
 
+
         <!-- Services Section -->
         <section id="services" class="services section">
 
           <!-- Section Title -->
           <div class="container section-title" data-aos="fade-up">
             <h2>Our Services</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+            <p>At VisionVoice, we provide intelligent, inclusive, and empowering educational services built for students with unique needs.</p>
           </div><!-- End Section Title -->
 
           <div class="container">
-
             <div class="row gy-4">
 
               <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                <div class="service-item  position-relative">
+                <div class="service-item position-relative">
                   <div class="icon">
-                    <i class="bi bi-activity"></i>
+                    <i class="bi bi-ear"></i>
                   </div>
-                  <h3>Nesciunt Mete</h3>
-                  <p>Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores iure perferendis tempore et consequatur.</p>
+                  <h3>Voice-Controlled Navigation</h3>
+                  <p>Enabling blind and paralyzed students to navigate classes, lessons, and calendars through speech recognition and synthesis.</p>
                   <a href="service-details.html" class="readmore stretched-link">Read more <i class="bi bi-arrow-right"></i></a>
                 </div>
-              </div><!-- End Service Item -->
+              </div>
 
               <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
                 <div class="service-item position-relative">
                   <div class="icon">
-                    <i class="bi bi-broadcast"></i>
+                    <i class="bi bi-sign-language"></i>
                   </div>
-                  <h3>Eosle Commodi</h3>
-                  <p>Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque eum hic non ut nesciunt dolorem.</p>
+                  <h3>Sign Language Recognition</h3>
+                  <p>AI-powered sign interpretation that converts gestures into spoken words, helping nonverbal students communicate in real time.</p>
                   <a href="service-details.html" class="readmore stretched-link">Read more <i class="bi bi-arrow-right"></i></a>
                 </div>
-              </div><!-- End Service Item -->
+              </div>
 
               <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
                 <div class="service-item position-relative">
                   <div class="icon">
-                    <i class="bi bi-easel"></i>
+                    <i class="bi bi-book"></i>
                   </div>
-                  <h3>Ledo Markt</h3>
-                  <p>Ut excepturi voluptatem nisi sed. Quidem fuga consequatur. Minus ea aut. Vel qui id voluptas adipisci eos earum corrupti.</p>
+                  <h3>Braille Lesson Translation</h3>
+                  <p>Automatic conversion of lesson content into Braille-ready text files to support blind students' literacy and independence.</p>
                   <a href="service-details.html" class="readmore stretched-link">Read more <i class="bi bi-arrow-right"></i></a>
                 </div>
-              </div><!-- End Service Item -->
+              </div>
 
               <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
                 <div class="service-item position-relative">
                   <div class="icon">
-                    <i class="bi bi-bounding-box-circles"></i>
+                    <i class="bi bi-calendar-week"></i>
                   </div>
-                  <h3>Asperiores Commodit</h3>
-                  <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident adipisci neque.</p>
+                  <h3>Smart Attendance System</h3>
+                  <p>Calendar-based attendance with voice feedback, allowing students to track their academic engagement with ease.</p>
                   <a href="service-details.html" class="readmore stretched-link">Read more <i class="bi bi-arrow-right"></i></a>
                 </div>
-              </div><!-- End Service Item -->
+              </div>
 
               <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
                 <div class="service-item position-relative">
                   <div class="icon">
-                    <i class="bi bi-calendar4-week"></i>
+                    <i class="bi bi-person-video2"></i>
                   </div>
-                  <h3>Velit Doloremque</h3>
-                  <p>Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut. Sed animi at autem alias eius labore.</p>
+                  <h3>Live Student Video Feed</h3>
+                  <p>Parental access to student livestreams for enhanced visibility and reassurance, built on secure WebRTC technology.</p>
                   <a href="service-details.html" class="readmore stretched-link">Read more <i class="bi bi-arrow-right"></i></a>
                 </div>
-              </div><!-- End Service Item -->
+              </div>
 
               <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
                 <div class="service-item position-relative">
                   <div class="icon">
-                    <i class="bi bi-chat-square-text"></i>
+                    <i class="bi bi-chat-dots"></i>
                   </div>
-                  <h3>Dolori Architecto</h3>
-                  <p>Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure. Corrupti recusandae ducimus enim.</p>
+                  <h3>Real-Time Messaging</h3>
+                  <p>Instant chat between teachers and parents with auto-delete after 24 hours, ensuring communication and privacy.</p>
                   <a href="service-details.html" class="readmore stretched-link">Read more <i class="bi bi-arrow-right"></i></a>
                 </div>
-              </div><!-- End Service Item -->
+              </div>
 
             </div>
-
           </div>
+        </section>
+        <!-- /Services Section -->
 
-        </section><!-- /Services Section -->
 
         <!-- Testimonials Section -->
         <section id="testimonials" class="testimonials section">
 
           <!-- Section Title -->
           <div class="container section-title" data-aos="fade-up">
-            <h2>Testimonials</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+            <h2>What People Say</h2>
+            <p>Hear from parents, students, and educators about their experiences with VisionVoice's inclusive and intelligent learning system.</p>
           </div><!-- End Section Title -->
 
           <div class="container" data-aos="fade-up" data-aos-delay="100">
-
             <div class="swiper init-swiper">
               <script type="application/json" class="swiper-config">
                 {
@@ -371,526 +374,430 @@
                   }
                 }
               </script>
+
               <div class="swiper-wrapper">
 
                 <div class="swiper-slide">
                   <div class="testimonial-item">
-                    <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-                    <h3>Saul Goodman</h3>
-                    <h4>Ceo &amp; Founder</h4>
-                    <div class="stars">
-                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                    </div>
-                    <p>
-                      <i class="bi bi-quote quote-icon-left"></i>
-                      <span>Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.</span>
+                    <img src="assets/img/testimonials/student.jpg" class="testimonial-img" alt="Blind student">
+                    <h3>Aaliyah Rahim</h3>
+                    <h4>Blind Student</h4>
+                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                    <p><i class="bi bi-quote quote-icon-left"></i>
+                      <span>VisionVoice changed my life. I can access my calendar, listen to lessons, and attend virtual classes—all with my voice.</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>
-                </div><!-- End testimonial item -->
+                </div>
 
                 <div class="swiper-slide">
                   <div class="testimonial-item">
-                    <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-                    <h3>Sara Wilsson</h3>
-                    <h4>Designer</h4>
-                    <div class="stars">
-                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                    </div>
-                    <p>
-                      <i class="bi bi-quote quote-icon-left"></i>
-                      <span>Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.</span>
+                    <img src="assets/img/testimonials/parent.jpg" class="testimonial-img" alt="Parent">
+                    <h3>Mohammed Kassem</h3>
+                    <h4>Parent</h4>
+                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                    <p><i class="bi bi-quote quote-icon-left"></i>
+                      <span>As a father of a nonverbal child, I finally feel seen. VisionVoice empowers my son with tools I never thought possible.</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>
-                </div><!-- End testimonial item -->
+                </div>
 
                 <div class="swiper-slide">
                   <div class="testimonial-item">
-                    <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-                    <h3>Jena Karlis</h3>
-                    <h4>Store Owner</h4>
-                    <div class="stars">
-                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                    </div>
-                    <p>
-                      <i class="bi bi-quote quote-icon-left"></i>
-                      <span>Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.</span>
+                    <img src="assets/img/testimonials/teacher.jpg" class="testimonial-img" alt="Teacher">
+                    <h3>Rania Khoury</h3>
+                    <h4>Special Education Teacher</h4>
+                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                    <p><i class="bi bi-quote quote-icon-left"></i>
+                      <span>The platform allows seamless communication between teachers and students. It has transformed the way I teach and interact.</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>
-                </div><!-- End testimonial item -->
+                </div>
 
                 <div class="swiper-slide">
                   <div class="testimonial-item">
-                    <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
-                    <h3>Matt Brandon</h3>
-                    <h4>Freelancer</h4>
-                    <div class="stars">
-                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                    </div>
-                    <p>
-                      <i class="bi bi-quote quote-icon-left"></i>
-                      <span>Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.</span>
+                    <img src="assets/img/testimonials/admin.jpg" class="testimonial-img" alt="School admin">
+                    <h3>Imad Fayad</h3>
+                    <h4>School Administrator</h4>
+                    <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                    <p><i class="bi bi-quote quote-icon-left"></i>
+                      <span>We've adopted VisionVoice across our special education programs. It's smart, secure, and most importantly—inclusive.</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>
-                </div><!-- End testimonial item -->
-
-                <div class="swiper-slide">
-                  <div class="testimonial-item">
-                    <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
-                    <h3>John Larson</h3>
-                    <h4>Entrepreneur</h4>
-                    <div class="stars">
-                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                    </div>
-                    <p>
-                      <i class="bi bi-quote quote-icon-left"></i>
-                      <span>Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.</span>
-                      <i class="bi bi-quote quote-icon-right"></i>
-                    </p>
-                  </div>
-                </div><!-- End testimonial item -->
+                </div>
 
               </div>
+
               <div class="swiper-pagination"></div>
             </div>
-
           </div>
 
         </section><!-- /Testimonials Section -->
+
 
         <!-- Portfolio Section -->
         <section id="library" class="portfolio section">
 
           <!-- Section Title -->
-          <div class="container section-title" data-aos="fade-up">
+          <!-- <div class="container section-title" data-aos="fade-up">
             <h2>Library</h2>
             <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-          </div><!-- End Section Title -->
+          </div> -->
+          <!-- End Section Title -->
 
-          <div class="container">
+          <!-- <div class="container">
 
             <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
 
               <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
                 <li data-filter="*" class="filter-active">All</li>
                 <li data-filter=".filter-app">Courses Books</li>
-                <li data-filter=".filter-product">Entertainment Books</li>
-              </ul><!-- End Portfolio Filters -->
+                <li data-filter=".filter-product">Entertainment Books</li> -->
+          <!-- </ul> -->
+          <!-- End Portfolio Filters -->
 
 
 
-            </div>
-
+          <!-- </div> -->
+          <!-- 
           </div>
 
-        </section><!-- /Portfolio Section -->
+        </section> -->
+          <!-- /Portfolio Section -->
 
-        <!-- Team Section -->
-        <section id="team" class="team section">
+          <!-- Team Section -->
+          <section id="team" class="team section">
 
-          <!-- Section Title -->
-          <div class="container section-title" data-aos="fade-up">
-            <h2>Our Team</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-          </div><!-- End Section Title -->
+            <!-- Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+              <h2>Our Team</h2>
+              <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+            </div><!-- End Section Title -->
 
-          <div class="container">
+            <div class="container">
 
-            <div class="row gy-4">
+              <div class="row gy-4">
 
 
-              <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
-                <div class="member">
-                  <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                  <h4>Walter White</h4>
-                  <span>Web Development</span>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter-x"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
-                </div>
-              </div><!-- End Team Member -->
-
-              <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
-                <div class="member">
-                  <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                  <h4>Sarah Jhinson</h4>
-                  <span>Marketing</span>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter-x"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
-                </div>
-              </div><!-- End Team Member -->
-
-              <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="300">
-                <div class="member">
-                  <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                  <h4>William Anderson</h4>
-                  <span>Content</span>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter-x"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
-                </div>
-              </div><!-- End Team Member -->
-
-              <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="400">
-                <div class="member">
-                  <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
-                  <h4>Amanda Jepson</h4>
-                  <span>Accountant</span>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter-x"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
-                </div>
-              </div><!-- End Team Member -->
-
-            </div>
-
-          </div>
-
-        </section><!-- /Team Section -->
-
-        <!-- Pricing Section -->
-        <section id="pricing" class="pricing section">
-
-          <!-- Section Title -->
-          <div class="container section-title" data-aos="fade-up">
-            <h2>Pricing</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-          </div><!-- End Section Title -->
-
-          <div class="container" data-aos="zoom-in" data-aos-delay="100">
-
-            <div class="row g-4">
-
-              <div class="col-lg-4">
-                <div class="pricing-item">
-                  <h3>Free Plan</h3>
-                  <div class="icon">
-                    <i class="bi bi-box"></i>
-                  </div>
-                  <h4><sup>$</sup>0<span> / month</span></h4>
-                  <ul>
-                    <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
-                    <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
-                    <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>
-                    <li class="na"><i class="bi bi-x"></i> <span>Pharetra massa massa ultricies</span></li>
-                    <li class="na"><i class="bi bi-x"></i> <span>Massa ultricies mi quis hendrerit</span></li>
-                  </ul>
-                  <div class="text-center"><a href="#" class="buy-btn">Buy Now</a></div>
-                </div>
-              </div><!-- End Pricing Item -->
-
-              <div class="col-lg-4">
-                <div class="pricing-item featured">
-                  <h3>Business Plan</h3>
-                  <div class="icon">
-                    <i class="bi bi-rocket"></i>
-                  </div>
-
-                  <h4><sup>$</sup>29<span> / month</span></h4>
-                  <ul>
-                    <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
-                    <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
-                    <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>
-                    <li><i class="bi bi-check"></i> <span>Pharetra massa massa ultricies</span></li>
-                    <li><i class="bi bi-check"></i> <span>Massa ultricies mi quis hendrerit</span></li>
-                  </ul>
-                  <div class="text-center"><a href="#" class="buy-btn">Buy Now</a></div>
-                </div>
-              </div><!-- End Pricing Item -->
-
-              <div class="col-lg-4">
-                <div class="pricing-item">
-                  <h3>Developer Plan</h3>
-                  <div class="icon">
-                    <i class="bi bi-send"></i>
-                  </div>
-                  <h4><sup>$</sup>49<span> / month</span></h4>
-                  <ul>
-                    <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
-                    <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
-                    <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>
-                    <li><i class="bi bi-check"></i> <span>Pharetra massa massa ultricies</span></li>
-                    <li><i class="bi bi-check"></i> <span>Massa ultricies mi quis hendrerit</span></li>
-                  </ul>
-                  <div class="text-center"><a href="#" class="buy-btn">Buy Now</a></div>
-                </div>
-              </div><!-- End Pricing Item -->
-
-            </div>
-
-          </div>
-
-        </section><!-- /Pricing Section -->
-
-        <!-- Faq Section -->
-        <section id="faq" class="faq section">
-
-          <div class="container">
-
-            <div class="row gy-4">
-
-              <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="content px-xl-5">
-                  <h3><span>Frequently Asked </span><strong>Questions</strong></h3>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit
-                  </p>
-                </div>
-              </div>
-
-              <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
-
-                <div class="faq-container">
-                  <div class="faq-item faq-active">
-                    <h3><span class="num">1.</span> <span>Non consectetur a erat nam at lectus urna duis?</span></h3>
-                    <div class="faq-content">
-                      <p>Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.</p>
-                    </div>
-                    <i class="faq-toggle bi bi-chevron-right"></i>
-                  </div><!-- End Faq item-->
-
-                  <div class="faq-item">
-                    <h3><span class="num">2.</span> <span>Feugiat scelerisque varius morbi enim nunc faucibus a pellentesque?</span></h3>
-                    <div class="faq-content">
-                      <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
-                    </div>
-                    <i class="faq-toggle bi bi-chevron-right"></i>
-                  </div><!-- End Faq item-->
-
-                  <div class="faq-item">
-                    <h3><span class="num">3.</span> <span>Dolor sit amet consectetur adipiscing elit pellentesque?</span></h3>
-                    <div class="faq-content">
-                      <p>Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis</p>
-                    </div>
-                    <i class="faq-toggle bi bi-chevron-right"></i>
-                  </div><!-- End Faq item-->
-
-                  <div class="faq-item">
-                    <h3><span class="num">4.</span> <span>Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla?</span></h3>
-                    <div class="faq-content">
-                      <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
-                    </div>
-                    <i class="faq-toggle bi bi-chevron-right"></i>
-                  </div><!-- End Faq item-->
-
-                  <div class="faq-item">
-                    <h3><span class="num">5.</span> <span>Tempus quam pellentesque nec nam aliquam sem et tortor consequat?</span></h3>
-                    <div class="faq-content">
-                      <p>Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in</p>
-                    </div>
-                    <i class="faq-toggle bi bi-chevron-right"></i>
-                  </div><!-- End Faq item-->
-
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-
-        </section><!-- /Faq Section -->
-
-        <!-- Recent Posts Section -->
-        <section id="recent-posts" class="recent-posts section">
-
-          <!-- Section Title -->
-          <div class="container section-title" data-aos="fade-up">
-            <h2>Recent Blog Posts</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-          </div><!-- End Section Title -->
-
-          <div class="container">
-
-            <div class="row gy-4">
-
-              <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                <article>
-
-                  <div class="post-img">
-                    <img src="assets/img/blog/blog-1.jpg" alt="" class="img-fluid">
-                  </div>
-
-                  <p class="post-category">Politics</p>
-
-                  <h2 class="title">
-                    <a href="blog-details.html">Dolorum optio tempore voluptas dignissimos</a>
-                  </h2>
-
-                  <div class="d-flex align-items-center">
-                    <img src="assets/img/blog/blog-author.jpg" alt="" class="img-fluid post-author-img flex-shrink-0">
-                    <div class="post-meta">
-                      <p class="post-author">Maria Doe</p>
-                      <p class="post-date">
-                        <time datetime="2022-01-01">Jan 1, 2022</time>
-                      </p>
+                <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
+                  <div class="member">
+                    <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
+                    <h4>Walter White</h4>
+                    <span>Web Development</span>
+                    <div class="social">
+                      <a href=""><i class="bi bi-twitter-x"></i></a>
+                      <a href=""><i class="bi bi-facebook"></i></a>
+                      <a href=""><i class="bi bi-instagram"></i></a>
+                      <a href=""><i class="bi bi-linkedin"></i></a>
                     </div>
                   </div>
+                </div><!-- End Team Member -->
 
-                </article>
-              </div><!-- End post list item -->
-
-              <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <article>
-
-                  <div class="post-img">
-                    <img src="assets/img/blog/blog-2.jpg" alt="" class="img-fluid">
-                  </div>
-
-                  <p class="post-category">Sports</p>
-
-                  <h2 class="title">
-                    <a href="blog-details.html">Nisi magni odit consequatur autem nulla dolorem</a>
-                  </h2>
-
-                  <div class="d-flex align-items-center">
-                    <img src="assets/img/blog/blog-author-2.jpg" alt="" class="img-fluid post-author-img flex-shrink-0">
-                    <div class="post-meta">
-                      <p class="post-author">Allisa Mayer</p>
-                      <p class="post-date">
-                        <time datetime="2022-01-01">Jun 5, 2022</time>
-                      </p>
+                <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
+                  <div class="member">
+                    <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
+                    <h4>Sarah Jhinson</h4>
+                    <span>Marketing</span>
+                    <div class="social">
+                      <a href=""><i class="bi bi-twitter-x"></i></a>
+                      <a href=""><i class="bi bi-facebook"></i></a>
+                      <a href=""><i class="bi bi-instagram"></i></a>
+                      <a href=""><i class="bi bi-linkedin"></i></a>
                     </div>
                   </div>
+                </div><!-- End Team Member -->
 
-                </article>
-              </div><!-- End post list item -->
-
-              <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <article>
-
-                  <div class="post-img">
-                    <img src="assets/img/blog/blog-3.jpg" alt="" class="img-fluid">
-                  </div>
-
-                  <p class="post-category">Entertainment</p>
-
-                  <h2 class="title">
-                    <a href="blog-details.html">Possimus soluta ut id suscipit ea ut in quo quia et soluta</a>
-                  </h2>
-
-                  <div class="d-flex align-items-center">
-                    <img src="assets/img/blog/blog-author-3.jpg" alt="" class="img-fluid post-author-img flex-shrink-0">
-                    <div class="post-meta">
-                      <p class="post-author">Mark Dower</p>
-                      <p class="post-date">
-                        <time datetime="2022-01-01">Jun 22, 2022</time>
-                      </p>
+                <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="300">
+                  <div class="member">
+                    <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
+                    <h4>William Anderson</h4>
+                    <span>Content</span>
+                    <div class="social">
+                      <a href=""><i class="bi bi-twitter-x"></i></a>
+                      <a href=""><i class="bi bi-facebook"></i></a>
+                      <a href=""><i class="bi bi-instagram"></i></a>
+                      <a href=""><i class="bi bi-linkedin"></i></a>
                     </div>
                   </div>
+                </div><!-- End Team Member -->
 
-                </article>
-              </div><!-- End post list item -->
-
-            </div><!-- End recent posts list -->
-
-          </div>
-
-        </section><!-- /Recent Posts Section -->
-
-        <!-- Contact Section -->
-        <section id="contact" class="contact section">
-
-          <!-- Section Title -->
-          <div class="container section-title" data-aos="fade-up">
-            <h2>Contact</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-          </div><!-- End Section Title -->
-
-          <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-            <div class="row gx-lg-0 gy-4">
-
-              <div class="col-lg-4">
-                <div class="info-container d-flex flex-column align-items-center justify-content-center">
-                  <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
-                    <i class="bi bi-geo-alt flex-shrink-0"></i>
-                    <div>
-                      <h3>Address</h3>
-                      <p>A108 Adam Street, New York, NY 535022</p>
+                <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="400">
+                  <div class="member">
+                    <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
+                    <h4>Amanda Jepson</h4>
+                    <span>Accountant</span>
+                    <div class="social">
+                      <a href=""><i class="bi bi-twitter-x"></i></a>
+                      <a href=""><i class="bi bi-facebook"></i></a>
+                      <a href=""><i class="bi bi-instagram"></i></a>
+                      <a href=""><i class="bi bi-linkedin"></i></a>
                     </div>
-                  </div><!-- End Info Item -->
-
-                  <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
-                    <i class="bi bi-telephone flex-shrink-0"></i>
-                    <div>
-                      <h3>Call Us</h3>
-                      <p>+1 5589 55488 55</p>
-                    </div>
-                  </div><!-- End Info Item -->
-
-                  <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
-                    <i class="bi bi-envelope flex-shrink-0"></i>
-                    <div>
-                      <h3>Email Us</h3>
-                      <p>info@example.com</p>
-                    </div>
-                  </div><!-- End Info Item -->
-
-                  <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="500">
-                    <i class="bi bi-clock flex-shrink-0"></i>
-                    <div>
-                      <h3>Open Hours:</h3>
-                      <p>Mon-Sat: 11AM - 23PM</p>
-                    </div>
-                  </div><!-- End Info Item -->
-
-                </div>
+                  </div>
+                </div><!-- End Team Member -->
 
               </div>
 
-              <div class="col-lg-8">
-                <form action="" method="post" class="php-email-form" data-aos="fade" data-aos-delay="100">
-                  <div class="row gy-4">
+            </div>
 
-                    <div class="col-md-6">
-                      <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+          </section><!-- /Team Section -->
+
+
+          <!-- Faq Section -->
+          <section id="faq" class="faq section">
+            <div class="container">
+              <div class="row gy-4">
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                  <div class="content px-xl-5">
+                    <h3><span>Frequently Asked </span><strong>Questions</strong></h3>
+                    <p>
+                      Learn more about how VisionVoice transforms education for blind, nonverbal, and paralyzed students using inclusive technologies.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+                  <div class="faq-container">
+
+                    <div class="faq-item faq-active">
+                      <h3><span class="num">1.</span> <span>What makes VisionVoice unique for disabled students?</span></h3>
+                      <div class="faq-content">
+                        <p>
+                          VisionVoice uses AI-powered voice recognition, speech synthesis, and Braille translation to create a fully accessible learning environment for students with physical or sensory impairments.
+                        </p>
+                      </div>
+                      <i class="faq-toggle bi bi-chevron-right"></i>
                     </div>
 
-                    <div class="col-md-6 ">
-                      <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
+                    <div class="faq-item">
+                      <h3><span class="num">2.</span> <span>Can VisionVoice be used by students who are both blind and nonverbal?</span></h3>
+                      <div class="faq-content">
+                        <p>
+                          Yes. VisionVoice supports alternative communication through sign language recognition, real-time subtitles, and AI-generated voice prompts, ensuring everyone can participate equally.
+                        </p>
+                      </div>
+                      <i class="faq-toggle bi bi-chevron-right"></i>
                     </div>
 
-                    <div class="col-md-12">
-                      <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
+                    <div class="faq-item">
+                      <h3><span class="num">3.</span> <span>How are lessons made accessible to blind students?</span></h3>
+                      <div class="faq-content">
+                        <p>
+                          Lessons can be read aloud using screen reading technology and exported into Braille-ready formats. The interface is also keyboard-navigable and voice-controlled.
+                        </p>
+                      </div>
+                      <i class="faq-toggle bi bi-chevron-right"></i>
                     </div>
 
-                    <div class="col-md-12">
-                      <textarea class="form-control" name="message" rows="8" placeholder="Message" required=""></textarea>
+                    <div class="faq-item">
+                      <h3><span class="num">4.</span> <span>Does the system support parent communication?</span></h3>
+                      <div class="faq-content">
+                        <p>
+                          Absolutely. Parents receive automatic updates via WhatsApp, SMS, or email, including attendance reports, grades, and event notifications for their children.
+                        </p>
+                      </div>
+                      <i class="faq-toggle bi bi-chevron-right"></i>
                     </div>
 
-                    <div class="col-md-12 text-center">
-                      <div class="loading">Loading</div>
-                      <div class="error-message"></div>
-                      <div class="sent-message">Your message has been sent. Thank you!</div>
-
-                      <button type="submit">Send Message</button>
+                    <div class="faq-item">
+                      <h3><span class="num">5.</span> <span>Is training provided for schools to use VisionVoice?</span></h3>
+                      <div class="faq-content">
+                        <p>
+                          Yes. We offer onboarding sessions, video tutorials, and dedicated support to ensure your teachers and administrators can use the platform effectively from day one.
+                        </p>
+                      </div>
+                      <i class="faq-toggle bi bi-chevron-right"></i>
                     </div>
 
                   </div>
-                </form>
-              </div><!-- End Contact Form -->
+                </div>
+              </div>
+            </div>
+          </section><!-- /Faq Section -->
+
+          <!-- Recent Posts Section -->
+          <section id="recent-posts" class="recent-posts section">
+
+            <!-- Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+              <h2>Recent Blog Posts</h2>
+              <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+            </div><!-- End Section Title -->
+
+            <div class="container">
+
+              <div class="row gy-4">
+
+                <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                  <article>
+
+                    <div class="post-img">
+                      <img src="assets/img/blog/blog-1.jpg" alt="" class="img-fluid">
+                    </div>
+
+                    <p class="post-category">Politics</p>
+
+                    <h2 class="title">
+                      <a href="blog-details.html">Dolorum optio tempore voluptas dignissimos</a>
+                    </h2>
+
+                    <div class="d-flex align-items-center">
+                      <img src="assets/img/blog/blog-author.jpg" alt="" class="img-fluid post-author-img flex-shrink-0">
+                      <div class="post-meta">
+                        <p class="post-author">Maria Doe</p>
+                        <p class="post-date">
+                          <time datetime="2022-01-01">Jan 1, 2022</time>
+                        </p>
+                      </div>
+                    </div>
+
+                  </article>
+                </div><!-- End post list item -->
+
+                <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                  <article>
+
+                    <div class="post-img">
+                      <img src="assets/img/blog/blog-2.jpg" alt="" class="img-fluid">
+                    </div>
+
+                    <p class="post-category">Sports</p>
+
+                    <h2 class="title">
+                      <a href="blog-details.html">Nisi magni odit consequatur autem nulla dolorem</a>
+                    </h2>
+
+                    <div class="d-flex align-items-center">
+                      <img src="assets/img/blog/blog-author-2.jpg" alt="" class="img-fluid post-author-img flex-shrink-0">
+                      <div class="post-meta">
+                        <p class="post-author">Allisa Mayer</p>
+                        <p class="post-date">
+                          <time datetime="2022-01-01">Jun 5, 2022</time>
+                        </p>
+                      </div>
+                    </div>
+
+                  </article>
+                </div><!-- End post list item -->
+
+                <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                  <article>
+
+                    <div class="post-img">
+                      <img src="assets/img/blog/blog-3.jpg" alt="" class="img-fluid">
+                    </div>
+
+                    <p class="post-category">Entertainment</p>
+
+                    <h2 class="title">
+                      <a href="blog-details.html">Possimus soluta ut id suscipit ea ut in quo quia et soluta</a>
+                    </h2>
+
+                    <div class="d-flex align-items-center">
+                      <img src="assets/img/blog/blog-author-3.jpg" alt="" class="img-fluid post-author-img flex-shrink-0">
+                      <div class="post-meta">
+                        <p class="post-author">Mark Dower</p>
+                        <p class="post-date">
+                          <time datetime="2022-01-01">Jun 22, 2022</time>
+                        </p>
+                      </div>
+                    </div>
+
+                  </article>
+                </div><!-- End post list item -->
+
+              </div><!-- End recent posts list -->
 
             </div>
 
-          </div>
+          </section><!-- /Recent Posts Section -->
 
-        </section><!-- /Contact Section -->
+          <!-- Contact Section -->
+          <section id="contact" class="contact section">
+
+            <!-- Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+              <h2>Contact</h2>
+              <p>If you have any questions or need support, our team is here to assist you. Reach out to us anytime.</p>
+            </div><!-- End Section Title -->
+
+            <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+              <div class="row gx-lg-0 gy-4">
+
+                <div class="col-lg-4">
+                  <div class="info-container d-flex flex-column align-items-center justify-content-center">
+
+                    <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
+                      <i class="bi bi-geo-alt flex-shrink-0"></i>
+                      <div>
+                        <h3>Address</h3>
+                        <p>Beirut, Lebanon<br>Block C, 2nd Floor</p>
+                      </div>
+                    </div><!-- End Info Item -->
+
+                    <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+                      <i class="bi bi-telephone flex-shrink-0"></i>
+                      <div>
+                        <h3>Call Us</h3>
+                        <p>+961 70 074639</p>
+                      </div>
+                    </div><!-- End Info Item -->
+
+                    <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+                      <i class="bi bi-envelope flex-shrink-0"></i>
+                      <div>
+                        <h3>Email Us</h3>
+                        <p>visionvoice@gmail.com</p>
+                      </div>
+                    </div><!-- End Info Item -->
+
+                    <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="500">
+                      <i class="bi bi-clock flex-shrink-0"></i>
+                      <div>
+                        <h3>Working Hours</h3>
+                        <p>Mon - Sat: 8:00 AM – 6:00 PM</p>
+                      </div>
+                    </div><!-- End Info Item -->
+
+                  </div>
+                </div>
+
+
+                <div class="col-lg-8">
+                  <form id="contactForm" method="post" class="php-email-form">
+                    @csrf
+                    <div class="row gy-4">
+                      <div class="col-md-6">
+                        <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                      </div>
+
+                      <div class="col-md-6">
+                        <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+                      </div>
+
+                      <div class="col-md-12">
+                        <input type="text" name="subject" class="form-control" placeholder="Subject" required>
+                      </div>
+
+                      <div class="col-md-12">
+                        <textarea name="message" class="form-control" rows="6" placeholder="Message" required></textarea>
+                      </div>
+
+                      <div class="col-md-12 text-center">
+                        <button type="submit">Send Message</button>
+                      </div>
+                    </div>
+                  </form>
+
+                </div><!-- End Contact Form -->
+
+              </div>
+            </div>
+          </section><!-- /Contact Section -->
+
 
   </main>
   @include('client.common.footer')
@@ -926,3 +833,50 @@
     /* Optional: Add transparency */
   }
 </style>
+<!-- SweetAlert Script -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- SweetAlert and AJAX -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch("{{ url('/contact/send') }}", {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Message Sent!',
+            text: data.message,
+            confirmButtonColor: '#3674B5'
+          });
+          form.reset();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: data.message || 'Something went wrong.',
+            confirmButtonColor: '#d33'
+          });
+        }
+      })
+      .catch(err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed!',
+          text: 'An unexpected error occurred.',
+          confirmButtonColor: '#d33'
+        });
+      });
+  });
+</script>

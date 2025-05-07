@@ -174,6 +174,17 @@
                     <span class="nav-link-text ms-1">Active Class</span>
                 </a>
             </li>
+            <li class="nav-item pb-2">
+                <a class="nav-link {{ Str::startsWith(Route::currentRouteName(), 'camera.student') ? 'active' : '' }}"
+                    href="{{ route('camera.student') }}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                            <path class="color-background" d="M192 64c-35.3 0-64 28.7-64 64v256c0 35.3 28.7 64 64 64h192c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H192zM0 128v256c0 17.7 14.3 32 32 32h48V96H32C14.3 96 0 110.3 0 128zm576 0l-96 72v112l96 72V128z" />
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">My Camera</span>
+                </a>
+            </li>
             @endif
             @endif
             @if(Auth::check())
@@ -203,6 +214,30 @@
                     <span class="nav-link-text ms-1">Chat</span>
                 </a>
             </li>
+             <li class="nav-item pb-2">
+                <a class="nav-link {{ Str::startsWith(Route::currentRouteName(), 'parentdash.classes') ? 'active' : '' }}"
+                    href="{{ route('parentdash.classes') }}">
+                    <div
+                        class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                            <path class="color-background" d="M160 64c0-35.3 28.7-64 64-64L576 0c35.3 0 64 28.7 64 64l0 288c0 35.3-28.7 64-64 64l-239.2 0c-11.8-25.5-29.9-47.5-52.4-64l99.6 0 0-32c0-17.7 14.3-32 32-32l64 0c17.7 0 32 14.3 32 32l0 32 64 0 0-288L224 64l0 49.1C205.2 102.2 183.3 96 160 96l0-32zm0 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zM133.3 352l53.3 0C260.3 352 320 411.7 320 485.3c0 14.7-11.9 26.7-26.7 26.7L26.7 512C11.9 512 0 500.1 0 485.3C0 411.7 59.7 352 133.3 352z" />
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Classes</span>
+                </a>
+            </li>
+            <li class="nav-item pb-2">
+                <a class="nav-link {{ Str::startsWith(Route::currentRouteName(), 'camera.parent') ? 'active' : '' }}"
+                    href="{{ route('camera.parent') }}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                            <path class="color-background" d="M192 64c-35.3 0-64 28.7-64 64v256c0 35.3 28.7 64 64 64h192c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H192zM0 128v256c0 17.7 14.3 32 32 32h48V96H32C14.3 96 0 110.3 0 128zm576 0l-96 72v112l96 72V128z" />
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">View Student Camera</span>
+                </a>
+            </li>
+
 
             @endif
             @endif

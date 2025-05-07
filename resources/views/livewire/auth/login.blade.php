@@ -60,7 +60,10 @@
             animation: spin 150s linear infinite;
         }
     </style>
+
+
 </section>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     window.addEventListener('login-success', event => {
@@ -92,105 +95,139 @@
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        if (!('webkitSpeechRecognition' in window)) {
-            alert("Your browser does not support speech recognition. Please use Google Chrome.");
+        if (!('webkitSpeechRecognition' in window) || !window.speechSynthesis) {
+            alert("Your browser doesn't support voice features. Please use Chrome.");
             return;
         }
 
-        let recognition = new webkitSpeechRecognition();
+        const synth = window.speechSynthesis;
+        const recognition = new webkitSpeechRecognition();
         recognition.lang = 'en-US';
-        recognition.continuous = true; // Keep listening forever
         recognition.interimResults = false;
+        recognition.continuous = false;
 
-        recognition.onstart = function() {
-            Swal.fire({
-                icon: 'info',
-                title: 'Listening...',
-                text: 'Say "Email", "Password", "Clear", "Delete", or "Sign in"',
-                timer: 4000,
-                showConfirmButton: false
-            });
+        let currentStep = 'ask-assist';
+
+        const speak = (text, callback) => {
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.onend = callback;
+            synth.cancel();
+            synth.speak(utter);
         };
 
-        recognition.onresult = function(event) {
-            let result = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
-            console.log("Recognized: ", result);
+        const isValidEmail = (email) => {
+            const pattern = /^[a-z]+\.[a-z]+@school\.com$/;
+            return pattern.test(email);
+        };
 
-            // Fix special characters and cleanup the text
-            result = result.replace(" at ", "@");
-            result = result.replace(" dot ", ".");
-            result = result.replace(/\s+/g, ''); // Remove all spaces
+        const isValidPassword = (password) => {
+            return /^[a-z0-9]+$/.test(password);
+        };
 
-            // Handle "email" command
-            if (result.includes("email")) {
-                let email = result.replace("email", "").trim();
-                document.getElementById("email").value = email;
-                @this.set('email', email); // Update Livewire email field
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Email Added ✅',
-                    text: email,
-                    timer: 3000,
-                    showConfirmButton: false
-                });
+        const askNext = () => {
+            if (currentStep === 'email') {
+                speak("Please say your email.", () => recognition.start());
+            } else if (currentStep === 'password') {
+                speak("Now, say your password.", () => recognition.start());
+            } else if (currentStep === 'confirm') {
+                speak("Do you want to sign in now? Say yes to continue or no to restart.", () => recognition.start());
+            }
+        };
+
+        recognition.onresult = (event) => {
+            let spokenText = event.results[0][0].transcript.toLowerCase().trim().replace(/\.$/, '');
+            console.log("Recognized:", spokenText);
+
+            if (currentStep === 'ask-assist') {
+                if (spokenText.includes("yes")) {
+                    speak("Great, let's begin.", () => {
+                        currentStep = 'email';
+                        askNext();
+                    });
+                } else {
+                    speak("Voice assistance is turned off.");
+                }
+                return;
             }
 
-            // Handle "password" command
-            if (result.includes("password")) {
-                let password = result.replace("password", "").trim();
+            if (currentStep === 'email') {
+                spokenText = spokenText
+                    .replace(" at ", "@")
+                    .replace(" dot ", ".")
+                    .replace(/\s/g, '')
+                    .replace(/\.$/, '');
+
+                if (!isValidEmail(spokenText)) {
+                    speak("Invalid email format. Please try again.", () => askNext());
+                    return;
+                }
+
+                document.getElementById("email").value = spokenText;
+                document.getElementById("email").dispatchEvent(new Event('input'));
+                @this.set('email', spokenText);
+                speak("Email received.", () => {
+                    currentStep = 'password';
+                    askNext();
+                });
+            } else if (currentStep === 'password') {
+                // Break down spoken characters and filter only valid ones (letters/numbers)
+                const chars = spokenText
+                    .toLowerCase()
+                    .replace(/\s/g, '') // remove all spaces
+                    .split('') // split into characters
+                    .filter(c => /[a-z0-9]/.test(c)); // keep only valid characters
+
+                const password = chars.join('');
+
+                if (!isValidPassword(password)) {
+                    speak("Invalid password format. Please try again.", () => askNext());
+                    return;
+                }
+
                 document.getElementById("password").value = password;
-                @this.set('password', password); // Update Livewire password field
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Password Added 🔑',
-                    text: "Secured 😎",
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-            }
+                document.getElementById("password").dispatchEvent(new Event('input'));
+                @this.set('password', password);
 
-            // Handle "clear" or "delete" command
-            if (result.includes("clear") || result.includes("delete")) {
-                document.getElementById("email").value = '';
-                document.getElementById("password").value = '';
-                @this.set('email', ''); // Clear Livewire email field
-                @this.set('password', ''); // Clear Livewire password field
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Fields Cleared',
-                    text: 'Email and Password have been cleared.',
-                    timer: 3000,
-                    showConfirmButton: false
+                speak("Password saved.", () => {
+                    currentStep = 'confirm';
+                    askNext();
                 });
-            }
-
-            // Handle "login" or "sign in" command
-            if (result.includes("login") || result.includes("signin")) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Signing in...',
-                    text: 'Please wait',
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-                @this.call('login'); // Call the Livewire login method
+            } else if (currentStep === 'confirm') {
+                if (spokenText.includes("yes")) {
+                    speak("Signing you in now.", () => {
+                        document.querySelector('button[type=\"submit\"]').click();
+                    });
+                } else {
+                    speak("Restarting login process.", () => {
+                        currentStep = 'email';
+                        askNext();
+                    });
+                }
             }
         };
 
-        recognition.onerror = function(event) {
-            console.error('Speech recognition error', event.error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Speech recognition error, please try again!',
-            });
+        recognition.onerror = (event) => {
+            console.error('Recognition error:', event.error);
+            speak("Sorry, I didn't catch that. Let's try again.", () => askNext());
         };
 
-        recognition.onend = function() {
-            // Restart the recognition when it ends
-            recognition.start();
-        };
+        setTimeout(() => {
+            speak("Welcome. Would you like voice assistance to log in? Say yes or no.", () => recognition.start());
+        }, 1000);
+    });
 
-        recognition.start();
+    // Login failed handler with retry
+    window.addEventListener('login-failed', () => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: 'Invalid email or password. Would you like to try again?',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Try Again'
+        }).then(() => {
+            const retryUtter = new SpeechSynthesisUtterance("Let's try again from the beginning.");
+            retryUtter.onend = () => location.reload();
+            window.speechSynthesis.speak(retryUtter);
+        });
     });
 </script>

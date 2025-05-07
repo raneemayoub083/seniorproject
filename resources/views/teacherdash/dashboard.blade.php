@@ -36,54 +36,72 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-8">
-                <div class="row">
-                    <div class="col-6"></div>
-                    <div class="col-6">
-                        <h1 style="color:#3674B5">ID card:</h1>
-                        <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
-                                    <div style="background-color:white;padding-top:10px">
-                                        <p class="heading_8264">Teacher-Vision Voice</p>
-                                        <img src="../assets/img/visionvoicelogo.png" class="logo" width="36" height="36">
+                <br>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div style="background-color:white;padding-top:10px">
+                                <p class="heading_8264">Teacher-Vision Voice</p>
+                                <img src="../assets/img/visionvoicelogo.png" class="logo" width="36" height="36">
 
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <image class="chip rounded-pill" id="image0" width="70" height="70" src="{{ Storage::url($teacher->profile_img) }}"></image>
-                                            </div>
-                                            <div class="col-8" style="text-align:left;">
-                                                <p class="ppp"><span style="font-size:1.4em !important">{{ $teacher->first_name }} {{ $teacher->last_name }}</span>
-                                                    <br>{{ $teacher->user->email }} <br> @foreach($teacher->subjects as $subject)
-                                                    {{ $subject->name }}@if(!$loop->last), @endif
-                                                    @endforeach
-                                            </div>
-                                        </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <image class="chip rounded-pill" id="image0" width="70" height="70" src="{{ Storage::url($teacher->profile_img) }}"></image>
                                     </div>
-                                </div>
-                                <div class="flip-card-back">
-                                    <div class="strip">Vision Voice School</div>
-                                    <div class="mstrip">
-
-                                        <p>Email:Visionvoice@gmail.com
-                                            <br>Phone number:+961 70074639
-                                        </p>
-
+                                    <div class="col-8" style="text-align:left;">
+                                        <p class="ppp"><span style="font-size:1.4em !important">{{ $teacher->first_name }} {{ $teacher->last_name }}</span>
+                                            <br>{{ $teacher->user->email }} <br> @foreach($teacher->subjects as $subject)
+                                            {{ $subject->name }}@if(!$loop->last), @endif
+                                            @endforeach
                                     </div>
-
                                 </div>
                             </div>
                         </div>
+                        <div class="flip-card-back">
+                            <div class="strip">Vision Voice School</div>
+                            <div class="mstrip">
+
+                                <p>Email:Visionvoice@gmail.com
+                                    <br>Phone number:+961 70074639
+                                </p>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mt-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Upcoming Exams & Events</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="dashboard-calendar"></div>
+                            </div>
+                        </div>
+                        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+                        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+
+                    </div>
 
 
-                        <!-- jQuery -->
-                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                        <!-- DataTables JS -->
-                        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+
+                    <!-- jQuery -->
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <!-- DataTables JS -->
+                    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 </x-layouts.app>
 <style>
+    h5 {
+        color: white;
+    }
+
     .flip-card {
         background-color: transparent;
         width: 240px;
@@ -209,6 +227,7 @@
 
     .flip-card-front,
     .flip-card-back {
+
         box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
         position: absolute;
         display: flex;
@@ -222,11 +241,13 @@
     }
 
     .flip-card-front {
+        margin-left: 70px;
         box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
         background-color: #3674B5;
     }
 
     .flip-card-back {
+        margin-left: -70px;
         box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
         background-color: #3674B5;
         transform: rotateY(180deg);
@@ -373,3 +394,50 @@
         left: -50px;
     }
 </style>
+<style>
+    #dashboard-calendar {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .fc-toolbar-title {
+        font-size: 1.25rem;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('dashboard-calendar');
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            height: 'auto',
+            events: '/calendar/events',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+            eventColor: '#0d6efd',
+            eventDisplay: 'block',
+
+            // ✅ This triggers the modal on click
+            eventClick: function(info) {
+                const event = info.event;
+
+                Swal.fire({
+                    title: event.title,
+                    html: `
+                        <p><strong>Date:</strong> ${event.start.toLocaleDateString()}</p>
+                        ${event.extendedProps.description ? `<p><strong>Description:</strong> ${event.extendedProps.description}</p>` : ''}
+                        ${event.extendedProps.type ? `<p><strong>Type:</strong> ${event.extendedProps.type}</p>` : ''}
+                    `,
+                    icon: 'info',
+                    confirmButtonColor: '#3674B5',
+                    confirmButtonText: 'Close'
+                });
+            }
+        });
+
+        calendar.render();
+    });
+</script>

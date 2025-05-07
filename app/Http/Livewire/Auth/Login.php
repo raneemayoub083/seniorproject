@@ -16,7 +16,7 @@ class Login extends Component
         'email' => 'required|email:rfc,dns',
         'password' => 'required',
     ];
-
+    protected $listeners = ['setEmail', 'setPassword'];
     public function mount()
     {
         if (auth()->check()) {
@@ -57,5 +57,14 @@ class Login extends Component
     public function render()
     {
         return view('livewire.auth.login');
+    }
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
     }
 }
