@@ -104,10 +104,11 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingsDropdown" style="border-radius: 12px; min-width: 200px; box-shadow: 0 4px 16px rgba(0,0,0,0.15);">
                             <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2" href="javascript:;">
+                                <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('profile.index') }}">
                                     <i class="fa fa-user-circle text-primary"></i> Profile
                                 </a>
                             </li>
+
                             <li>
                                 <a class="dropdown-item d-flex align-items-center gap-2" href="javascript:;">
                                     <i class="fa fa-moon text-warning"></i> Theme Settings

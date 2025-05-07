@@ -98,43 +98,95 @@
 
             <!-- Calendar Section -->
             <div class="row mt-4">
-                <div class="col-8">
-                    <div class="card p-4">
-                        <div class="row">
-                            <div class="col-12">
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal">
+                <!-- Calendar Section -->
+                <div class="col-12 col-lg-8 mb-4">
+                    <div class="card p-4 h-100">
+                        <div class="row mb-3">
+                            <div class="col-12 d-flex flex-column flex-sm-row gap-2">
+                                <button class="bn" data-bs-toggle="modal" data-bs-target="#eventModal">
                                     Add Event
+                                    <svg fill="currentColor" viewBox="0 0 24 24" class="ic">
+                                        <path
+                                            clip-rule="evenodd"
+                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+                                            fill-rule="evenodd"></path>
+                                    </svg>
                                 </button>
-                                <button class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#addExamModal">
+                             
+                                <button class="bn" data-bs-toggle="modal" data-bs-target="#addExamModal">
                                     Add Exam
+                                    <svg fill="currentColor" viewBox="0 0 24 24" class="ic">
+                                        <path
+                                            clip-rule="evenodd"
+                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+                                            fill-rule="evenodd"></path>
+                                    </svg>
                                 </button>
+
+                                <button class="bn">
+
+                                    <a href="{{ route('apply') }}" style="color:white;">Add Application</a>
+                                    <svg fill="currentColor" viewBox="0 0 24 24" class="ic">
+                                        <path
+                                            clip-rule="evenodd"
+                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+                                            fill-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+
+                                <button class="bn">
+
+                                    <a href="{{ route('application.index') }}" style="color:white;">Review Applications</a>
+                                    <svg fill="currentColor" viewBox="0 0 24 24" class="ic">
+                                        <path
+                                            clip-rule="evenodd"
+                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+                                            fill-rule="evenodd"></path></svg>
+                                </button>
+
+                                <button class="bn">
+                                    <a href="{{ route('teacher.create') }}" style="color:white;">Add  Teacher</a>
+                                    <svg fill="currentColor" viewBox="0 0 24 24" class="ic">
+                                        <path
+                                            clip-rule="evenodd"
+                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+                                            fill-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+
                             </div>
-
                         </div>
-
-
 
                         <div id="calendar"></div>
                     </div>
                 </div>
-                <div class="col-4">
+
+                <!-- Academic Year Chart Section -->
+                <div class="col-12 col-lg-4">
                     @if($academicYear)
-                    <div class="card shadow-lg border-0" style="border-radius: 1rem;">
+                    <div class="card shadow-lg border-0 h-40" style="border-radius: 1rem;">
                         <div class="card-body text-center py-4">
                             <h6 class="text-uppercase text-secondary mb-2">
                                 Academic Year Progress — {{ $academicYear->name }}
                             </h6>
 
-                            <canvas id="academicProgressChart" width="160" height="160"></canvas>
+                            <canvas id="academicProgressChart" width="160" height="160" class="mx-auto"></canvas>
                             <p class="text-muted mt-3 mb-0 small">
                                 {{ \Carbon\Carbon::parse($academicYear->start_date)->format('M d, Y') }}
                                 → {{ \Carbon\Carbon::parse($academicYear->end_date)->format('M d, Y') }}
                             </p>
                         </div>
                     </div>
+                    <div class="card shadow-lg border-0 h-40 mt-2" style="border-radius: 1rem;">
+                        <div class="row mt-4">
+
+                        </div>
+                    </div>
+
                     @endif
                 </div>
             </div>
+
             <!-- Add Exam Modal -->
             <div class="modal fade" id="addExamModal" tabindex="-1" aria-labelledby="addExamModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -326,6 +378,78 @@
     <!-- FullCalendar CSS (optional if you want) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.css">
     <style>
+        /* From Uiverse.io by jackson_2777 */
+        .bn {
+            position: relative;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            padding-block: 0.5rem;
+            padding-inline: 1.25rem;
+            background-color: rgb(0 107 179);
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffff;
+            gap: 10px;
+            font-weight: bold;
+            border: 3px solid #ffffff4d;
+            outline: none;
+            overflow: hidden;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .ic {
+            width: 50px;
+            height: 50px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .bn:hover {
+            transform: scale(1.05);
+            border-color: #fff9;
+        }
+
+        .bn:hover .icon {
+            transform: translate(4px);
+        }
+
+        .bn:hover::before {
+            animation: shine 1.5s ease-out infinite;
+        }
+
+        .bn::before {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100%;
+            /* background-image: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0) 70%
+  ); */
+            top: 0;
+            left: -100px;
+            opacity: 0.6;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100px;
+            }
+
+            60% {
+                left: 100%;
+            }
+
+            to {
+                left: 100%;
+            }
+        }
+
+
         #calendar {
 
             padding: 20px;

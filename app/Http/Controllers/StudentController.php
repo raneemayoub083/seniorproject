@@ -111,4 +111,15 @@ class StudentController extends Controller
 
         return response()->json($events);
     }
+
+    public function index(Request $request)
+    {
+        $students = Student::with(['application.academicYear', 'application.disabilities'])
+            ->whereHas('application', function ($query) {
+                $query->where('status', 'approved'); // only show approved applications
+            })
+            ->get();
+
+        return view('student.index', compact('students'));
+    }
 }

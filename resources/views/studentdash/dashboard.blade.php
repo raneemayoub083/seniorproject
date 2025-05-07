@@ -1,99 +1,95 @@
 <x-layouts.app>
-    <div class="container">
-        <p class="mt-4" style="color:#729762;text-align:center;text-shadow:2px 2px 5px white;">
+    <div class="container-fluid px-3 px-md-5">
+        <p class="mt-4 text-center" style="color:#729762;text-shadow:2px 2px 5px white;">
             <button data-text="Awesome" class="buttonpma">
                 <span class="actual-text">&nbsp;Dashboard&nbsp;</span>
                 <span class="hover-text" aria-hidden="true">&nbsp;Dashboard&nbsp;</span>
             </button>
         </p>
 
-
         <div class="row">
-            <div class="col-4">
+            <!-- Left Column: ID Card + Flip Card -->
+            <div class="col-12 col-md-4 mt-5 mb-4 d-flex flex-column align-items-center">
                 <div class="id-card-tag"></div>
                 <div class="id-card-tag-strip"></div>
                 <div class="id-card-hook"></div>
-                <div class="id-card-holder">
+
+                <div class="id-card-holder mb-4">
                     <div class="id-card">
                         <div class="header">
-                            <img src="../assets/img/visionvoicelogo.png">
+                            <img src="../assets/img/visionvoicelogo.png" class="img-fluid" alt="Vision Voice Logo">
                         </div>
-                        <div class="photo">
+                        <div class="photo text-center">
                             @if($student->application->profile_img)
-                            <img src="{{ Storage::url($student->application->profile_img) }}" alt="Profile Image" width="50">
+                            <img src="{{ Storage::url($student->application->profile_img) }}" alt="Profile Image" class="img-fluid mb-2" style="max-height: 100px;">
                             @else
-                            N/A
+                            <p>N/A</p>
                             @endif
-                            <h2>{{ $student->application->first_name }} {{ $student->application->last_name }}</h2>
-
-                            <h3>{{ $student->user->email }}</h3>
+                            <h2 class="fs-5">{{ $student->application->first_name }} {{ $student->application->last_name }}</h2>
+                            <h3 class="fs-6">{{ $student->user->email }}</h3>
                             <hr>
-                            <p class="p"><strong>Email:Visionvoice@gmail.com</strong></p>
-                            <p class="p"><strong>Phone number:+961 70074639</strong></p>
-
-
-
+                            <p class="p"><strong>Email:</strong> Visionvoice@gmail.com</p>
+                            <p class="p"><strong>Phone:</strong> +961 70074639</p>
                         </div>
                     </div>
                 </div>
 
-                <br>
-                <div class="flip-card">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div style="background-color:white;padding-top:10px">
-                                <p class="heading_8264">Student-Vision Voice</p>
-                                <img src="../assets/img/visionvoicelogo.png" class="logo" width="36" height="36">
+                <!-- Flip Card -->
+                <div class="flip-card-wrapper d-flex justify-content-center">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div class="p-3 bg-white">
+                                    <p class="heading_8264">Student - Vision Voice</p>
+                                    <img src="../assets/img/visionvoicelogo.png" class="logo" width="36" height="36">
 
-                                <div class="row">
-                                    <div class="col-4">
-                                        <image class="chip rounded-pill" id="image0" width="70" height="70" src="{{ Storage::url($student->application->profile_img) }}"></image>
-                                    </div>
-                                    <div class="col-8" style="text-align:left;">
-                                        <p class="ppp"><span style="font-size:1.4em !important">{{ $student->application->first_name }} {{ $student->application->last_name }}</span>
-                                            <br>{{ $student->user->email }} <br>
-
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <img class="chip rounded-pill" id="image0" width="70" height="70" src="{{ Storage::url($student->application->profile_img) }}">
+                                        </div>
+                                        <div class="col-8 text-start">
+                                            <p class="ppp">
+                                                <span class="fw-bold" style="font-size: 1.2em">{{ $student->application->first_name }} {{ $student->application->last_name }}</span><br>
+                                                {{ $student->user->email }}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="strip">Vision Voice School</div>
-                            <div class="mstrip">
 
-                                <p>Email:Visionvoice@gmail.com
-                                    <br>Phone number:+961 70074639
-                                </p>
-
+                            <div class="flip-card-back d-flex flex-column justify-content-center align-items-center">
+                                <div class="strip text-center">Vision Voice School</div>
+                                <div class="mstrip text-center p-2">
+                                    <p>Email: Visionvoice@gmail.com<br>Phone: +961 70074639</p>
+                                </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-8">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card mt-4">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="mb-0">Upcoming Exams & Events</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="dashboard-calendar"></div>
-                            </div>
-                        </div>
-                        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
-                        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
 
+            <!-- Right Column: Calendar -->
+            <div class="col-12 col-md-8 mb-4">
+                <div class="card mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Upcoming Exams & Events</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="dashboard-calendar"></div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- jQuery -->
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                <!-- DataTables JS -->
-                <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+        <!-- External Assets -->
+        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    </div>
 </x-layouts.app>
+
 <style>
     h5 {
         color: white;
@@ -237,13 +233,13 @@
     }
 
     .flip-card-front {
-        margin-left: 70px;
+        /* margin-left: 70px; */
         box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
         background-color: #3674B5;
     }
 
     .flip-card-back {
-        margin-left: -70px;
+        /* margin-left: -70px; */
         box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
         background-color: #3674B5;
         transform: rotateY(180deg);
@@ -435,8 +431,6 @@
 </style>
 
 <script>
-   
-
     let calendarInstance = null;
 
     document.addEventListener('DOMContentLoaded', function() {

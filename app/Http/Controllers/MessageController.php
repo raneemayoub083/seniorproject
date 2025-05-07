@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 
+
 class MessageController extends Controller
 {
     public function index($receiverId = null)
@@ -119,21 +120,23 @@ class MessageController extends Controller
         return view('chat.index', compact('contacts', 'receiver', 'messages', 'unreadCounts'));
     }
 
-    public function send(Request $request)
-    {
-        $request->validate([
-            'receiver_id' => 'required|exists:users,id',
-            'message' => 'required|string|max:1000',
-        ]);
+  public function send(Request $request)
+{
+    $request->validate([
+        'receiver_id' => 'required|exists:users,id',
+        'message' => 'required|string|max:1000',
+    ]);
 
-        Message::create([
-            'sender_id' => Auth::id(),
-            'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
-        ]);
+    // Encryption handled automatically in the model
+    Message::create([
+        'sender_id' => Auth::id(),
+        'receiver_id' => $request->receiver_id,
+        'message' => $request->message, // <-- this gets encrypted in the model
+    ]);
 
-        return redirect()->route('chat.index', $request->receiver_id)->with('success', 'Message sent!');
-    }
+    return redirect()->route('chat.index', $request->receiver_id)->with('success', 'Message sent!');
+}
+
     public function fetch(User $receiver)
     {
         $userId = auth()->id();

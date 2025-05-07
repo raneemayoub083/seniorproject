@@ -27,6 +27,7 @@ use App\Http\Controllers\NotificationController;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\ParentDashboardController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Livewire\LaravelExamples\UserProfile;
 use App\Http\Livewire\LaravelExamples\UserManagement;
 
@@ -65,6 +66,11 @@ Route::get('/reset-password/{id}', ResetPassword::class)->name('reset-password')
 
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
+    
+        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+        Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+   
     Route::get('/chat/{receiverId?}', [MessageController::class, 'index'])->name('chat.index');
     Route::post('/chat/send', [MessageController::class, 'send'])->name('chat.send');
     Route::get('/chat/fetch/{receiver}', [MessageController::class, 'fetch'])->name('chat.fetch');
@@ -130,6 +136,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/assign-teacher', [SubjectController::class, 'assignTeacher'])->name('assign.teacher');
         Route::post('/teachers/update-status/{id}', [TeacherController::class, 'updateStatus']);
     });
+    Route::get('/students', [StudentController::class, 'index'])->name('student.index');
+    
         // Teacher dashboard route
         Route::middleware(['auth', 'role:2'])->group(function () {
         Route::get('/teacher/dashboard', [TeacherController::class, 'showDashboard'])->name('teacherdash.dashboard');

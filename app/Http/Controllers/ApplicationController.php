@@ -91,13 +91,22 @@ class ApplicationController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Application submitted successfully!']);
     }
-
-    // Display the list of applications
-    public function index()
+    public function index(Request $request)
     {
-        $applications = Application::with('grade', 'disabilities')->get();
-        return view('application.index', compact('applications'));
+        $status = $request->query('status');
+
+        $applications = Application::with(['academicYear', 'grade', 'disabilities']);
+
+        if ($status) {
+            $applications->where('status', $status);
+        }
+
+        return view('application.index', [
+            'applications' => $applications->get()
+        ]);
     }
+
+   
 
     // Show the form for editing the specified application
     public function edit(Request $request)

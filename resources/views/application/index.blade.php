@@ -7,7 +7,17 @@
             </button>
         </p>
         <div class="mb-3 d-flex justify-content-end">
-            <a href="{{ route('apply') }}" class="btn btn-success">Create New Application</a>
+            @if(!request()->has('status'))
+            <a href="{{ route('application.index', ['status' => 'pending']) }}" class="btn btn-success m-2">Show Only Pending</a>
+            @endif
+            @if(request()->has('status'))
+           
+                <a href="{{ route('application.index') }}" class="btn btn-success m-2">Clear Filter</a>
+           
+            @endif
+            <a href="{{ route('apply') }}" class="btn btn-success m-2">Create New Application</a>
+
+
         </div>
         <div class="table-responsive">
             <table id="applications" class="table table-striped table-bordered">
