@@ -8,6 +8,8 @@
 <div id="sidebar" class="sidebar">
     <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">&times;</a>
     <div class="sidebar-title"> Features</div>
+  
+
     <!-- AI Feature: Advanced Text-to-Speech -->
     <div class="tts-section">
         <label for="ttsInput" class="tts-label">💬 Type your message</label>
@@ -51,6 +53,38 @@
         <button onclick="clearSigns()" class="tts-btn secondary-btn clear-btn">🗑️ Clear All</button>
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            // Global assistant toggle from sidebar
+            if (typeof window.assistantEnabled === 'undefined') {
+                window.assistantEnabled = true;
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                const openBtn = document.getElementById("openSidebarBtn");
+                const sidebar = document.getElementById("sidebar");
+
+                openBtn.onclick = function() {
+                    sidebar.style.width = "250px";
+                    window.assistantEnabled = false;
+                    if (window.speechSynthesis?.speaking) {
+                        window.speechSynthesis.cancel();
+                    }
+                    console.log("🔇 Assistant disabled while sidebar is open.");
+                }
+
+                window.closeSidebar = function() {
+                    sidebar.style.width = "0";
+                    window.assistantEnabled = true;
+                    console.log("✅ Assistant re-enabled after closing sidebar.");
+                }
+
+                window.toggleVoiceAssistant = function() {
+                    window.assistantEnabled = !window.assistantEnabled;
+                    const label = window.assistantEnabled ? '🔇 Disable Assistant' : '🔊 Enable Assistant';
+                    document.getElementById("toggleAssistantBtn").innerText = label;
+                }
+            });
+        </script>
 
         <style>
             .secondary-btn {

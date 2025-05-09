@@ -386,6 +386,7 @@
         left: -50px;
     }
 </style>
+
 <script>
     window.addEventListener('DOMContentLoaded', () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -419,16 +420,7 @@
         }
     });
 </script>
-<style>
-    #dashboard-calendar {
-        max-width: 100%;
-        margin: 0 auto;
-    }
 
-    .fc-toolbar-title {
-        font-size: 1.25rem;
-    }
-</style>
 
 <script>
     let calendarInstance = null;
@@ -596,7 +588,16 @@
         }, 1000);
     });
 </script>
+<style>
+    #dashboard-calendar {
+        max-width: 100%;
+        margin: 0 auto;
+    }
 
+    .fc-toolbar-title {
+        font-size: 1.25rem;
+    }
+</style>
 
 
 

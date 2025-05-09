@@ -200,7 +200,15 @@
             function handleCommand(spokenText) {
                 spokenText = spokenText.toLowerCase();
                 console.log("🧠 Processing:", spokenText);
-
+                if (transcript.includes("enter my classes")) {
+                    speak("Entering your classes.", () => {
+                        window.location.href = "{{ route('studentdash.classes') }}";
+                    });
+                } else if (transcript.includes("enter my active class")) {
+                    speak("Opening your active class.", () => {
+                        window.location.href = "{{ route('studentdash.activeclass') }}";
+                    });
+                }
                 if (spokenText.includes("stop") || spokenText.includes("exit") || spokenText.includes("goodbye")) {
                     active = false;
                     speak("Okay, stopping now. Have a great day!");

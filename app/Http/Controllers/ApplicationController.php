@@ -52,7 +52,7 @@ class ApplicationController extends Controller
             'parents_names' => 'required|string',
             'grade_id' => 'required|integer',
             'profile_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'precertificate' => 'nullable|mimes:pdf|max:2048',
+            'precertificate' => 'nullable|mimes:pdf,doc,docx|max:2048',
             'id_card_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 

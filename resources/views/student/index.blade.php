@@ -14,6 +14,7 @@
                         <th>Academic Year</th>
                         <th>First Name</th>
                         <th>Last Name</th>
+                        <th>Class History</th>
                         <th>Email</th>
                         <th>Profile Image</th>
                         <th>Date of Birth</th>
@@ -34,6 +35,12 @@
                         <td>{{ $student->application?->academicYear?->name ?? 'N/A' }}</td>
                         <td>{{ $student->application?->first_name ?? 'N/A' }}</td>
                         <td>{{ $student->application?->last_name ?? 'N/A' }}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm shadow__btn" data-bs-toggle="modal" data-bs-target="#classModal-{{ $student->id }}">
+                                View Classes
+                            </button>
+                        </td>
+
                         <td>{{ $student->user?->email ?? 'N/A' }}</td>
                         <td>
                             @if($student->application?->profile_img)
@@ -94,6 +101,50 @@
 
         </div>
     </div>
+    @foreach($students as $student)
+    <!-- Modal for Class History -->
+    <div class="modal fade" id="classModal-{{ $student->id }}" tabindex="-1" aria-labelledby="classModalLabel-{{ $student->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="classModalLabel-{{ $student->id }}">
+                        Class History — {{ $student->application?->first_name }} {{ $student->application?->last_name }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                </div>
+                <div class="modal-body">
+                    @php
+                    $studentModel = \App\Models\Student::with('sections.academicYear', 'sections.grade')->find($student->id);
+                    @endphp
+
+                    @if($studentModel && $studentModel->sections->isNotEmpty())
+                    <ul class="list-group">
+                        @foreach($studentModel->sections as $section)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                📚 <strong>{{ $section->grade->name ?? 'N/A' }}</strong> —
+                                🗓️ {{ $section->academicYear->name ?? 'N/A' }}
+                            </div>
+                            <div class="btn-group">
+                                <a href="{{ route('admin.student.viewGrades', ['student' => $student->id, 'section' => $section->id]) }}" class="btn btn-sm btn-outline-success">
+                                    🧪 View Grades
+                                </a>
+                                <a href="{{ route('admin.student.viewAttendance', ['student' => $student->id, 'section' => $section->id]) }}" class="btn btn-sm btn-outline-info">
+                                    📅 Attendance
+                                </a>
+                            </div>
+
+                        </li>
+                        @endforeach
+                    </ul>
+                    @else
+                    <p class="text-muted">No class history found for this student.</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

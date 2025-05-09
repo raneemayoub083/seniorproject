@@ -122,4 +122,90 @@ class StudentController extends Controller
 
         return view('student.index', compact('students'));
     }
+    public function adminViewGrades(Student $student, Section $section)
+    {
+        $subjects = DB::table('section_subject_teacher')
+            ->join('subjects', 'section_subject_teacher.subject_id', '=', 'subjects.id')
+            ->where('section_subject_teacher.section_id', $section->id)
+            ->select('subjects.*')
+            ->distinct()
+            ->get();
+
+        $firstSubject = $subjects->first();
+        $grades = collect();
+
+        if ($firstSubject) {
+            $grades = DB::table('exam_student_grades')
+                ->join('exams', 'exams.id', '=', 'exam_student_grades.exam_id')
+                ->join('events', 'exams.event_id', '=', 'events.id')
+                ->join('section_subject_teacher', 'exams.section_subject_teacher_id', '=', 'section_subject_teacher.id')
+                ->join('subjects', 'section_subject_teacher.subject_id', '=', 'subjects.id')
+                ->where('exam_student_grades.student_id', $student->id)
+                ->where('section_subject_teacher.section_id', $section->id)
+                ->where('section_subject_teacher.subject_id', $firstSubject->id)
+                ->select([
+                    'subjects.name as subject_name',
+                    'events.title as exam_title',
+                    'exam_student_grades.grade',
+                    'exams.id as exam_id'
+                ])
+                ->get();
+        }
+
+        return view('student.grades', compact('student', 'section', 'subjects', 'grades', 'firstSubject'));
+    }
+
+    public function adminFilterGradesBySubject(Student $student, Section $section, $subjectId)
+    {
+        $grades = DB::table('exam_student_grades')
+            ->join('exams', 'exams.id', '=', 'exam_student_grades.exam_id')
+            ->join('events', 'exams.event_id', '=', 'events.id')
+            ->join('section_subject_teacher', 'exams.section_subject_teacher_id', '=', 'section_subject_teacher.id')
+            ->join('subjects', 'section_subject_teacher.subject_id', '=', 'subjects.id')
+            ->where('exam_student_grades.student_id', $student->id)
+            ->where('section_subject_teacher.section_id', $section->id)
+            ->where('section_subject_teacher.subject_id', $subjectId) // ✅ fix here
+            ->select([
+                'subjects.name as subject_name',
+                'events.title as exam_title',
+                'exam_student_grades.grade',
+                'exams.id as exam_id'
+            ])
+            ->get();
+
+        return response()->json($grades);
+    }
+    public function adminViewAttendance(Student $student, Section $section)
+    {
+        $subjectIds = DB::table('section_subject_teacher')
+            ->where('section_id', $section->id)
+            ->pluck('subject_id');
+
+        $subjects = \App\Models\Subject::whereIn('id', $subjectIds)->get();
+        $firstSubject = $subjects->first();
+
+        $attendances = collect();
+
+        if ($firstSubject) {
+            $attendances = \App\Models\Attendance::with('subject')
+                ->where('student_id', $student->id)
+                ->where('section_id', $section->id)
+                ->where('subject_id', $firstSubject->id)
+                ->orderBy('date', 'desc')
+                ->get();
+        }
+
+        return view('student.viewAttendance', compact('student', 'section', 'subjects', 'firstSubject', 'attendances'));
+    }
+    public function adminFilterAttendanceBySubject(Student $student, Section $section, $subjectId)
+    {
+        $attendances = \App\Models\Attendance::with('subject')
+            ->where('student_id', $student->id)
+            ->where('section_id', $section->id)
+            ->where('subject_id', $subjectId)
+            ->orderBy('date', 'desc')
+            ->get();
+
+        return response()->json($attendances);
+    }
 }

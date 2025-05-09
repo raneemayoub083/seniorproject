@@ -72,94 +72,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
     <script>
-        const synth = window.speechSynthesis;
-        let currentUtterance = null;
-        let userHasInteracted = false;
-
-        // Expose speakText globally for debug
-        window.speakText = speakText;
-
-        // Load voices on change
-        speechSynthesis.onvoiceschanged = () => {
-            console.log("✅ Voices loaded:", speechSynthesis.getVoices());
-        };
-
-        function waitForVoices(callback) {
-            let voices = synth.getVoices();
-            if (voices.length) return callback(voices);
-            const interval = setInterval(() => {
-                voices = synth.getVoices();
-                if (voices.length) {
-                    clearInterval(interval);
-                    callback(voices);
-                }
-            }, 100);
-        }
-
-        function speakText(text) {
-            if (!text || !synth) return console.warn("🚫 No text or speech synthesis not supported.");
-            if (!userHasInteracted) return console.warn("🛑 Speech blocked: no user interaction.");
-
-            if (synth.speaking || synth.pending) {
-                console.warn("⏳ Already speaking or pending, cancelling...");
-                synth.cancel();
-                setTimeout(() => speakText(text), 500);
-                return;
-            }
-
-            try {
-                synth.cancel();
-                setTimeout(() => {
-                    const toSpeak = text.length > 300 ? text.slice(0, 300) + ' ...' : text;
-                    console.log("🗣️ Speaking text now:", toSpeak);
-
-                    const utterance = new SpeechSynthesisUtterance(toSpeak);
-                    utterance.lang = 'en-US';
-                    utterance.onstart = () => console.log("🔊 Voice speaking started...");
-                    utterance.onend = () => console.log("✅ Voice finished.");
-                    utterance.onerror = (e) => {
-                        console.error("❌ Speech failed:", e.error || e);
-                        Swal.fire('Speech Error', 'Browser failed to speak.', 'error');
-                    };
-
-                    waitForVoices((voices) => {
-                        let selectedVoice = voices.find(v => v.name === 'Google US English') ||
-                            voices.find(v => v.name.includes('Microsoft David')) ||
-                            voices.find(v => v.lang.startsWith('en'));
-
-                        if (!selectedVoice && voices.length) {
-                            selectedVoice = voices[0];
-                        }
-
-                        if (selectedVoice) {
-                            utterance.voice = selectedVoice;
-                            console.log("✅ Using voice:", selectedVoice.name);
-                        } else {
-                            console.warn("⚠️ No suitable voice found.");
-                        }
-
-                        synth.speak(utterance);
-                    });
-                }, 500);
-            } catch (err) {
-                console.error("❌ Speech Exception:", err);
-            }
-        }
-
-        function speakAndAlert(title, message, icon = 'info') {
-            Swal.fire(title, message, icon);
-            speakText(`${title}. ${message}`);
-        }
-
-        window.addEventListener('click', () => {
-            if (!userHasInteracted) {
-                userHasInteracted = true;
-                console.log("👆 User interaction enabled speech");
-            }
-        });
-    </script>
-
-    <script>
         $(document).ready(() => {
             $('#lessonsTable').DataTable();
 
@@ -232,20 +144,44 @@
                 speakAndAlert('Stopped', 'Reading stopped.', 'success');
             }
         }
+    </script>
+    <script>
+        const synth = window.speechSynthesis;
+        let userHasInteracted = false;
+        let selectedLessonTitle = null;
 
-        function triggerReadingManually() {
-            userHasInteracted = true;
-            speakAndAlert('Voice Ready', 'You can now use voice commands to read lessons.', 'success');
+        function waitForVoices(callback) {
+            let voices = synth.getVoices();
+            if (voices.length) return callback(voices);
+            const interval = setInterval(() => {
+                voices = synth.getVoices();
+                if (voices.length) {
+                    clearInterval(interval);
+                    callback(voices);
+                }
+            }, 100);
         }
 
-        async function readDocumentUnified(title) {
+        function speak(text, callback = null) {
+            if (!userHasInteracted || !text) return;
+            if (synth.speaking) synth.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            waitForVoices((voices) => {
+                const voice = voices.find(v => v.name.includes('Google US English') || v.lang.startsWith('en')) || voices[0];
+                if (voice) utterance.voice = voice;
+                if (callback) utterance.onend = () => setTimeout(callback, 500);
+                synth.speak(utterance);
+            });
+        }
+
+        async function readLessonDocument(title) {
             const rows = document.querySelectorAll('#lessonsTable tbody tr');
             for (const row of rows) {
                 const lessonName = row.cells[0]?.textContent.trim().toLowerCase();
-                if (lessonName.includes(title)) {
+                if (lessonName.includes(title.toLowerCase())) {
                     const fileLink = row.cells[3]?.querySelector('a')?.href;
-                    if (!fileLink) break;
-
                     const extension = fileLink.split('.').pop().toLowerCase();
                     let text = '';
 
@@ -268,105 +204,174 @@
                                 arrayBuffer: buffer
                             });
                             text = result.value;
-                        } else {
-                            speakAndAlert('Unsupported', `File type .${extension} not supported yet.`, 'warning');
-                            return;
                         }
 
-                        if (text.trim()) {
-                            console.log("✅ Extracted PDF text:", text.slice(0, 300));
-                            console.log("🚀 Calling speakText with extracted content...");
-                            speakText(text);
-                        } else {
-                            console.warn("⚠️ PDF.js could not extract readable content.");
-                            speakAndAlert('Empty', 'No readable content found in the file.', 'info');
-                        }
-                    } catch (err) {
-                        speakAndAlert('Error', 'Failed to read the document.', 'error');
-                        console.error('Reading error:', err);
+                        speak(text, askIfNeedAnythingElse);
+                    } catch {
+                        speak("I couldn't read the file. Please try again later.", askIfNeedAnythingElse);
                     }
-
                     return;
                 }
             }
 
-            speakAndAlert('Not Found', `Lesson "${title}" not found.`, 'error');
+            speak("Sorry, I couldn't find that lesson.", askIfNeedAnythingElse);
         }
 
-        function openLessonLink(title, type) {
+
+        function openLessonVideo(title) {
             const rows = document.querySelectorAll('#lessonsTable tbody tr');
             for (const row of rows) {
-                const lessonName = row.cells[0]?.textContent.trim().toLowerCase();
-                if (lessonName.includes(title)) {
-                    const linkCell = type === 'video' ? row.cells[2] : row.cells[3];
-                    const link = linkCell.querySelector('a');
-                    if (link) {
-                        window.open(link.href, '_blank');
+                const name = row.cells[0]?.textContent.trim().toLowerCase();
+                if (name.includes(title.toLowerCase())) {
+                    const videoLink = row.cells[2]?.querySelector('a');
+                    if (videoLink) {
+                        window.open(videoLink.href, '_blank');
+                        speak(`Opening video for ${title}`, askIfNeedAnythingElse);
                         return;
                     }
                 }
             }
-            console.warn(`Lesson "${title}" not found.`);
+            speak("Sorry, no video found for that lesson.", askIfNeedAnythingElse);
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert("Speech recognition not supported.");
+
+        function convertToBraille(title) {
+            const rows = document.querySelectorAll('#lessonsTable tbody tr');
+            for (const row of rows) {
+                const name = row.cells[0]?.textContent.trim().toLowerCase();
+                if (name.includes(title.toLowerCase())) {
+                    const btn = row.querySelector('.translateBrailleBtn');
+                    if (btn) {
+                        btn.click();
+                        speak("Converting to Braille. Your download will begin shortly.", askIfNeedAnythingElse);
+                        return;
+                    }
+                }
+            }
+            speak("No Braille option found for this lesson.", askIfNeedAnythingElse);
+        }
+
+        function askIfNeedAnythingElse() {
+            speak("Would you like help with anything else for this lesson, or a different one?", () => {
+                listenForActionCommand(); // let them say another command
+            });
+        }
+
+        function readAllLessons() {
+            const rows = document.querySelectorAll('#lessonsTable tbody tr');
+            if (!rows.length) {
+                speak("There are no lessons available right now.", askIfNeedAnythingElse);
                 return;
             }
 
+            let message = `You have ${rows.length} lessons. Here they are: `;
+
+            rows.forEach((row, index) => {
+                const title = row.cells[0]?.textContent.trim();
+                const description = row.cells[1]?.textContent.trim();
+                if (title) {
+                    message += `Lesson ${index + 1}: ${title}.`;
+                    if (description) {
+                        message += ` Description: ${description}. `;
+                    }
+                }
+            });
+
+            speak(message, askIfNeedAnythingElse);
+        }
+
+
+        function listenForActionCommand() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return;
+
             const recognition = new SpeechRecognition();
-            recognition.continuous = true;
+            recognition.continuous = false;
             recognition.lang = 'en-US';
-            recognition.start();
 
             recognition.onresult = (event) => {
-                const transcript = event.results[event.resultIndex][0].transcript.trim().toLowerCase();
-                console.log('🎤 Heard:', transcript);
+                const transcript = event.results[0][0].transcript.toLowerCase().trim();
+                console.log("🎤 User said:", transcript);
 
-                const has = (words) => words.every(w => transcript.includes(w));
-
-                if (has(['enter', 'dashboard'])) {
-                    window.location.href = "{{ route('studentdash.dashboard') }}";
-                } else if (has(['enter', 'classes'])) {
-                    window.location.href = "{{ route('studentdash.classes') }}";
-                } else if (has(['enter', 'active', 'class'])) {
-                    window.location.href = "{{ route('studentdash.activeclass') }}";
-                } else if (transcript.includes('start reading')) {
-                    document.getElementById('startReadingBtn')?.click();
-                } else if (transcript.includes('enter the video of')) {
-                    let title = transcript.split('enter the video of')[1]?.trim();
-                    if (title) {
-                        title = title.replace(/[.?!]$/, '').trim();
-                        openLessonLink(title, 'video');
-                    }
-                } else if (transcript.includes('read the file of')) {
-                    document.getElementById('startReadingBtn')?.click();
-                    let title = transcript.split('read the file of')[1]?.trim();
-                    title = title.replace(/[.?!]$/, '').trim();
-                    if (title) {
-                        speakAndAlert('Reading', `Reading "${title}"...`, 'info');
-                        setTimeout(() => readDocumentUnified(title), 500);
-                    }
-                } else if (transcript.includes('pause')) {
-                    pauseReading();
-                } else if (transcript.includes('resume') || transcript.includes('continue')) {
-                    resumeReading();
-                } else if (transcript.includes('stop')) {
-                    stopReading();
+                if (transcript.includes("read all lessons") || transcript.includes("read the table") || transcript.includes("list lessons")) {
+                    speak("Reading all available lessons now.", () => readAllLessons());
+                } else if (transcript.includes("video")) {
+                    speak("Opening the video now.", () => openLessonVideo(selectedLessonTitle));
+                } else if (transcript.includes("read") || transcript.includes("pdf")) {
+                    speak("Reading the document out loud.", () => readLessonDocument(selectedLessonTitle));
+                } else if (transcript.includes("braille")) {
+                    convertToBraille(selectedLessonTitle);
+                } else if (transcript.includes("new lesson") || transcript.includes("another lesson")) {
+                    startAssistantFlow();
+                } else if (transcript.includes("exit") || transcript.includes("no thanks")) {
+                    speak("Okay, I'm here if you need me again.");
+                } else {
+                    speak("Sorry, I didn't catch that. You can say: read all lessons, video, read the PDF, Braille, or another lesson.", () => {
+                        setTimeout(listenForActionCommand, 1000);
+                    });
                 }
             };
 
             recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event);
+                console.error("🎙️ Speech recognition error:", event.error);
+                speak("There was an error understanding your command. Please try again.", () => {
+                    setTimeout(listenForActionCommand, 1000);
+                });
             };
-        });
 
-        window.addEventListener('click', () => {
-            userHasInteracted = true;
+            recognition.start();
+        }
+
+
+        function startAssistantFlow() {
+            speak("Welcome to your lesson center. Which lesson would you like me to help you with?", () => {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) return;
+
+                const recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.lang = 'en-US';
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript.toLowerCase().replace(/[.?!]/g, '');
+                    selectedLessonTitle = transcript.trim();
+                    speak(`Great. For the lesson titled ${selectedLessonTitle}, would you like to enter the video, read the PDF out loud, or convert it to Braille and download it?`, () => {
+                        setTimeout(listenForActionCommand, 1000);
+                    });
+                };
+
+                recognition.onerror = () => {
+                    speak("Sorry, I couldn't hear the lesson name. Please try again.");
+                };
+
+                recognition.start();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let hasStarted = false;
+
+            function tryStartAssistant() {
+                if (!userHasInteracted && !hasStarted) {
+                    userHasInteracted = true;
+                    hasStarted = true;
+                    startAssistantFlow();
+                }
+            }
+
+            // Attempt auto-start (will work if coming from a previously unlocked page)
+            setTimeout(tryStartAssistant, 1000);
+
+            // Fallback: enable on first user interaction
+            document.body.addEventListener('click', tryStartAssistant, {
+                once: true
+            });
+            document.body.addEventListener('keydown', tryStartAssistant, {
+                once: true
+            });
         });
     </script>
+
 
 
 

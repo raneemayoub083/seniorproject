@@ -73,8 +73,9 @@
                 </a>
             </li>
             <li class="nav-item pb-2">
-                <a class="nav-link {{ Str::startsWith(Route::currentRouteName(), 'student') ? 'active' : '' }}"
+                <a class="nav-link {{ Str::startsWith(Route::currentRouteName(), 'student') || Str::startsWith(Route::currentRouteName(), 'admin.student') ? 'active' : '' }}"
                     href="{{ route('student.index') }}">
+
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
@@ -144,7 +145,6 @@
                     <span class="nav-link-text ms-1">Chat</span>
                 </a>
             </li>
-
             @endif
             @endif
             @if(Auth::check())
@@ -198,6 +198,25 @@
                 </a>
             </li>
             @endif
+            @endif
+            @if(
+            Auth::check() &&
+            Auth::user()->role->name === 'Student' &&
+            Auth::user()->student &&
+            Auth::user()->student->application &&
+            Auth::user()->student->application->disabilities()->where('disability_id', 2)->exists()
+            )
+            <li class="nav-item pb-2">
+                <a class="nav-link {{ Str::startsWith(Route::currentRouteName(), 'studentdash.nonverbal') ? 'active' : '' }}"
+                    href="{{ route('studentdash.nonverbal') }}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                            <path class="color-background" d="M192 64c-35.3 0-64 28.7-64 64v256c0 35.3 28.7 64 64 64h192c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H192zM0 128v256c0 17.7 14.3 32 32 32h48V96H32C14.3 96 0 110.3 0 128zm576 0l-96 72v112l96 72V128z" />
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Features</span>
+                </a>
+            </li>
             @endif
             @if(Auth::check())
             @if(Auth::user()->role->name == 'Parent')

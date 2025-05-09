@@ -137,9 +137,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/teachers/update-status/{id}', [TeacherController::class, 'updateStatus']);
     });
     Route::get('/students', [StudentController::class, 'index'])->name('student.index');
-    
-        // Teacher dashboard route
-        Route::middleware(['auth', 'role:2'])->group(function () {
+    Route::get('/student/{student}/grades/{section}', [StudentController::class, 'adminViewGrades'])->name('admin.student.viewGrades');
+    Route::get('/student/{student}/attendance/{section}', [StudentController::class, 'adminViewAttendance'])->name('admin.student.viewAttendance');
+
+    Route::get('/student/{student}/grades/{section}/subject/{subject}', [StudentController::class, 'adminFilterGradesBySubject'])->name('admin.student.filterGrades');
+    Route::get('/student/{student}/attendance/{section}/subject/{subject}', [StudentController::class, 'adminFilterAttendanceBySubject'])->name('admin.student.filterAttendance');
+
+    // Teacher dashboard route
+    Route::middleware(['auth', 'role:2'])->group(function () {
         Route::get('/teacher/dashboard', [TeacherController::class, 'showDashboard'])->name('teacherdash.dashboard');
 
         Route::get('/teacher/classes', [TeacherController::class, 'showClasses'])->name('teacherdash.classes');
@@ -181,6 +186,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student/attendance/{section}', [StudentController::class, 'attendanceCalendar'])->name('student.attendance.calendar');
     Route::get('/student/attendance/events/{section}', [StudentController::class, 'attendanceEvents'])->name('student.attendance.events');
     });
+    Route::get('/nonverbal', function () {
+        return view('studentdash.nonverbal');
+    })->name('studentdash.nonverbal');
+
     Route::middleware(['auth', 'role:4'])->group(function () {
         Route::get('/parent/dashboard', [ParentDashboardController::class, 'index'])->middleware(['auth'])->name('parentdash.dashboard');
   Route::get('/parent/classes', [ParentDashboardController::class, 'classesPage'])->name('parentdash.classes');

@@ -173,6 +173,7 @@
         }
     }
 </style>
+
 <script>
     window.addEventListener('DOMContentLoaded', () => {
         const synth = window.speechSynthesis;
@@ -242,11 +243,7 @@
                 }
             });
 
-            if (!matched) {
-                speak(`I couldn't find the subject ${cleanedTranscript}. Please try again.`, () => {
-                    restartRecognition();
-                });
-            }
+           
         }
 
         function processTranscript(transcript) {
