@@ -8,34 +8,55 @@ use Illuminate\Http\JsonResponse;
 
 class ContactController extends Controller
 {
-
     public function send(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'subject' => 'required|string|max:255',
-            'message' => 'required|string',
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'subject' => 'required|string|max:255',
+        'message' => 'required|string',
+    ]);
+
+    try {
+        $emailBody = "
+            New message from Vision Voice contact form:
+
+            Name: {$validated['name']}
+            Email: {$validated['email']}
+            Subject: {$validated['subject']}
+
+            Message:
+            {$validated['message']}
+        ";
+
+        \Log::info('Sending email with the following data:', $validated);
+        \Log::info('Email body preview: ' . $emailBody);
+
+        Mail::raw($emailBody, function ($mail) use ($validated) {
+            $mail->to('fatimadhaini14@gmail.com') // ✅ fixed recipient address
+                ->subject('Contact Form: ' . $validated['subject'])
+                ->from(config('mail.from.address'), config('mail.from.name')) // ✅ your verified Brevo sender
+                ->replyTo($validated['email'], $validated['name']); // ✅ user’s email shown when replying
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Your message has been sent successfully!',
+            'debug' => [
+                'mail_to' => 'fatimadhaini14@gmail.com',
+                'mail_from' => config('mail.from.address'),
+                'mail_name' => config('mail.from.name')
+            ]
         ]);
-
-        try {
-            Mail::raw($validated['message'], function ($mail) use ($validated) {
-                $mail->to('fatimadhaini14@email.com')
-                    ->subject('Contact Form: ' . $validated['subject'])
-                    ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->replyTo($validated['email'], $validated['name']);
-            });
-
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Your message has been sent successfully!',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'There was an error sending your message: ' . $e->getMessage(),
-            ]);
-        }
+    } catch (\Exception $e) {
+        \Log::error('Email failed to send: ' . $e->getMessage());
+        return response()->json([
+            'status' => 'error',
+            'message' => 'There was an error sending your message.',
+            'debug' => $e->getMessage()
+        ]);
     }
+}
+
+
 }

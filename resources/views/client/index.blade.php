@@ -471,79 +471,40 @@
           <!-- Team Section -->
           <section id="team" class="team section">
 
-            <!-- Section Title -->
-            <div class="container section-title" data-aos="fade-up">
-              <h2>Our Team</h2>
-              <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-            </div><!-- End Section Title -->
-
-            <div class="container">
-
-              <div class="row gy-4">
 
 
-                <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
-                  <div class="member">
-                    <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                    <h4>Walter White</h4>
-                    <span>Web Development</span>
-                    <div class="social">
-                      <a href=""><i class="bi bi-twitter-x"></i></a>
-                      <a href=""><i class="bi bi-facebook"></i></a>
-                      <a href=""><i class="bi bi-instagram"></i></a>
-                      <a href=""><i class="bi bi-linkedin"></i></a>
-                    </div>
-                  </div>
-                </div><!-- End Team Member -->
+          <!-- /Team Section -->
+           
+          <!-- raneem Section -->
+          <section style="padding: 4rem 0; background: #f4f9ff;">
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <h2 style="font-size: 2.5rem; color: #003366; animation: fadeInDown 1s ease;">Why Choose Vision Voice?</h2>
+    <p style="color: #666;">We combine technology, passion, and vision to deliver exceptional educational solutions.</p>
+  </div>
 
-                <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
-                  <div class="member">
-                    <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                    <h4>Sarah Jhinson</h4>
-                    <span>Marketing</span>
-                    <div class="social">
-                      <a href=""><i class="bi bi-twitter-x"></i></a>
-                      <a href=""><i class="bi bi-facebook"></i></a>
-                      <a href=""><i class="bi bi-instagram"></i></a>
-                      <a href=""><i class="bi bi-linkedin"></i></a>
-                    </div>
-                  </div>
-                </div><!-- End Team Member -->
-
-                <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="300">
-                  <div class="member">
-                    <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                    <h4>William Anderson</h4>
-                    <span>Content</span>
-                    <div class="social">
-                      <a href=""><i class="bi bi-twitter-x"></i></a>
-                      <a href=""><i class="bi bi-facebook"></i></a>
-                      <a href=""><i class="bi bi-instagram"></i></a>
-                      <a href=""><i class="bi bi-linkedin"></i></a>
-                    </div>
-                  </div>
-                </div><!-- End Team Member -->
-
-                <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="400">
-                  <div class="member">
-                    <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
-                    <h4>Amanda Jepson</h4>
-                    <span>Accountant</span>
-                    <div class="social">
-                      <a href=""><i class="bi bi-twitter-x"></i></a>
-                      <a href=""><i class="bi bi-facebook"></i></a>
-                      <a href=""><i class="bi bi-instagram"></i></a>
-                      <a href=""><i class="bi bi-linkedin"></i></a>
-                    </div>
-                  </div>
-                </div><!-- End Team Member -->
-
-              </div>
-
-            </div>
-
-          </section><!-- /Team Section -->
-
+  <div class="features-grid">
+    <div class="feature-box fade-in">
+      <img src="{{ asset('assets/img/blind1.jpeg') }}" alt="Blind 1" />
+      <h3>Accessible Design</h3>
+      <p>We focus on accessibility for all students, including those with visual impairments.</p>
+    </div>
+    <div class="feature-box fade-in" style="animation-delay: 0.3s;">
+      <img src="{{ asset('assets/img/blind2.jpeg') }}" alt="Blind 2" />
+      <h3>Inclusive Education</h3>
+      <p>Our system supports inclusive learning environments and equal opportunities.</p>
+    </div>
+    <div class="feature-box fade-in" style="animation-delay: 0.6s;">
+      <img src="{{ asset('assets/img/blind3.jpeg') }}" alt="Blind 3" />
+      <h3>Modern Tools</h3>
+      <p>We leverage the latest technology to support students’ academic success.</p>
+    </div>
+    <div class="feature-box fade-in" style="animation-delay: 0.9s;">
+      <img src="{{ asset('assets/img/blind4.jpeg') }}" alt="Blind 4" />
+      <h3>Real-Time Access</h3>
+      <p>Students and parents can access attendance, grades, and messages instantly.</p>
+    </div>
+  </div>
+</section>
 
           <!-- Faq Section -->
           <section id="faq" class="faq section">
@@ -835,8 +796,7 @@
 </style>
 <!-- SweetAlert Script -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- SweetAlert and AJAX -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
   document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -852,31 +812,34 @@
         body: formData
       })
       .then(res => res.json())
-      .then(data => {
-        if (data.status === 'success') {
-          Swal.fire({
-            icon: 'success',
-            title: 'Message Sent!',
-            text: data.message,
-            confirmButtonColor: '#3674B5'
-          });
-          form.reset();
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: data.message || 'Something went wrong.',
-            confirmButtonColor: '#d33'
-          });
-        }
-      })
-      .catch(err => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed!',
-          text: 'An unexpected error occurred.',
-          confirmButtonColor: '#d33'
-        });
-      });
+     .then(data => {
+  console.log("Debug response:", data); // ✅ console debug
+  if (data.status === 'success') {
+    Swal.fire({
+      icon: 'success',
+      title: 'Message Sent!',
+      text: data.message,
+      confirmButtonColor: '#3674B5'
+    });
+    form.reset();
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error!',
+      text: data.message || 'Something went wrong.',
+      confirmButtonColor: '#d33'
+    });
+  }
+})
+.catch(err => {
+  console.error("AJAX failed:", err); // ✅ show detailed JS error
+  Swal.fire({
+    icon: 'error',
+    title: 'Failed!',
+    text: 'An unexpected error occurred.',
+    confirmButtonColor: '#d33'
+  });
+});
+
   });
 </script>
