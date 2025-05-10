@@ -31,9 +31,9 @@ class NotificationController extends Controller
                             ->whereJsonContains('audience', 'teachers');
                     })
                     ->orWhere(function ($sub) use ($teacherExamEventIds) {
-                        $sub->whereNotNull('event_id')
-                            ->whereNotIn('event_id', $teacherExamEventIds)
-                            ->whereJsonContains('audience', 'teachers');
+                        $sub->whereNull('event_id')
+                        
+                            ->where('audience', 'like', '%teachers%');
                     });
             });
         } elseif ($role === 'student') {
@@ -48,15 +48,27 @@ class NotificationController extends Controller
                     ->orWhereIn('event_id', $studentExamEventIds)
                     ->orWhere(function ($sub) {
                         $sub->whereNull('event_id')
-                            ->whereJsonContains('audience', 'students');
+                        ->where('audience', 'like', '%students%');
                     });
             });
+        } elseif ($role === 'parent') {
+            $parentId = $user->parent->id;
+          
+           
+            // Same structure as teacher/student
+            $query->where(function ($q) use ($parentId) {
+                $q->whereNull('event_id')
+                  ->where('audience', 'like', '%parents%');
+                    });
+          
         } else {
             $query->whereJsonContains('audience', $role);
         }
 
         return response()->json($query->latest()->take(10)->get());
     }
+
+
 
 
     public function markAsRead($id)

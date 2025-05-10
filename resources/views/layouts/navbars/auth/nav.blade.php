@@ -159,66 +159,45 @@
             </div>
         </div>
     </nav>
-
     <script>
-        // Fix 1: Use 'let' instead of 'const' so you can change it
-        let currentUserRole = '{{ auth()->user()->role->name }}'; // Extract the role name (Student, Teacher, Parent)
-        // console.log('Current User Role:', currentUserRole);
-        // Fix 2: Normalize the role
-        if (currentUserRole === 'Student') {
-            currentUserRole = 'students';
-        } else if (currentUserRole === 'Teacher') {
-            currentUserRole = 'teachers';
-        } else if (currentUserRole === 'Admin') {
-            currentUserRole = 'admins';
-        } else if (currentUserRole === 'Parent') {
-            currentUserRole = 'parents';
-        }
-        // console.log('Normalized User Role:', currentUserRole);
+        // Normalize user role to match JSON keys
+        let currentUserRole = '{{ auth()->user()->role->name }}'.toLowerCase();
+        if (currentUserRole === 'student') currentUserRole = 'students';
+        if (currentUserRole === 'teacher') currentUserRole = 'teachers';
+        if (currentUserRole === 'admin') currentUserRole = 'admins';
+        if (currentUserRole === 'parent') currentUserRole = 'parents';
+
         function loadNotifications() {
             fetch('/notifications')
                 .then(response => response.json())
                 .then(data => {
                     const list = document.getElementById('notificationsList');
                     const count = document.getElementById('notificationCount');
-                    console.log('Notifications Data:', data);
+
                     list.innerHTML = '';
 
-                    if (data.length === 0) {
-                        item.innerHTML = `
-    <a class="dropdown-item border-radius-md" href="javascript:;">
-        <div class="d-flex py-1">
-            <div class="my-auto">
-                <div class="avatar avatar-sm bg-gradient-secondary me-3 my-auto">
-                    <i class="fa fa-bell text-white"></i>
-                </div>
-            </div>
-            <div class="d-flex flex-column justify-content-center">
-                <h6 class="notification-title">
-                    ${notification.title}
-                </h6>
-                <p class="notification-message">
-                    ${notification.message ? notification.message : 'No description available.'}
-                </p>
-                <p class="notification-time mb-0">
-                    <i class="fa fa-clock me-1"></i> ${formatTimeAgo(notification.created_at)}
-                </p>
-            </div>
-        </div>
-    </a>
-`;
-
+                    if (!Array.isArray(data) || data.length === 0) {
+                        list.innerHTML = `
+                        <li class="text-center">
+                            <span class="text-sm text-secondary">No notifications found</span>
+                        </li>
+                    `;
                         count.style.display = 'none';
                         return;
                     }
 
-                    // ✅ Filter notifications based on currentUserRole
                     const filteredNotifications = data.filter(notification => {
                         try {
-                            const audience = JSON.parse(notification.audience);
-                            return audience.includes(currentUserRole);
+                            let audience = notification.audience;
+
+                            // Parse once
+                            if (typeof audience === 'string') audience = JSON.parse(audience);
+                            // Parse twice if needed (double-encoded)
+                            if (typeof audience === 'string') audience = JSON.parse(audience);
+
+                            return Array.isArray(audience) && audience.includes(currentUserRole);
                         } catch (e) {
-                            console.error('Invalid audience data:', notification.audience);
+                            console.error('Failed to parse audience:', notification.audience, e);
                             return false;
                         }
                     });
@@ -239,7 +218,6 @@
                     filteredNotifications.forEach(notification => {
                         const item = document.createElement('li');
                         item.className = 'mb-2';
-
                         item.innerHTML = `
                         <a class="dropdown-item border-radius-md" href="javascript:;">
                             <div class="d-flex py-1">
@@ -253,7 +231,7 @@
                                         <span class="font-weight-bold">${notification.title}</span>
                                     </h6>
                                     <p class="text-xs text-secondary mb-1">
-                                        ${notification.message ? notification.message : 'No description available.'}
+                                        ${notification.message || 'No description available.'}
                                     </p>
                                     <p class="text-xxs text-muted mb-0">
                                         <i class="fa fa-clock me-1"></i>
@@ -266,14 +244,16 @@
                         list.appendChild(item);
                     });
                 })
-                .catch(error => console.error('Error loading notifications:', error));
+                .catch(error => {
+                    console.error('Error loading notifications:', error);
+                });
         }
 
-        // Helper function: format time ago
+        // Format time into "x min ago"
         function formatTimeAgo(timestamp) {
             const time = new Date(timestamp);
             const now = new Date();
-            const diff = Math.floor((now - time) / 60000);
+            const diff = Math.floor((now - time) / 60000); // in minutes
 
             if (diff < 1) return 'Just now';
             if (diff < 60) return `${diff} min ago`;
@@ -281,7 +261,7 @@
             return `${Math.floor(diff / 1440)} days ago`;
         }
 
-        // Load notifications every 30 seconds
-        setInterval(loadNotifications, 30000);
+        // Run now and repeat every 30 seconds
         loadNotifications();
+        setInterval(loadNotifications, 30000);
     </script>

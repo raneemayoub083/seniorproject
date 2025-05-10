@@ -388,46 +388,12 @@
 </style>
 
 <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRecognition) {
-            const recognition = new SpeechRecognition();
-            recognition.continuous = true;
-            recognition.lang = 'en-US';
-
-            recognition.onresult = function(event) {
-                const transcript = event.results[event.resultIndex][0].transcript.trim().toLowerCase();
-                console.log('Heard:', transcript);
-
-                const has = (keywords) => keywords.every(k => transcript.includes(k));
-
-                if (has(['enter', 'dashboard'])) {
-                    window.location.href = "{{ route('studentdash.dashboard') }}";
-                } else if (has(['enter', 'classes'])) {
-                    window.location.href = "{{ route('studentdash.classes') }}";
-                } else if (has(['enter', 'active', 'class'])) {
-                    window.location.href = "{{ route('studentdash.activeclass') }}";
-                }
-            };
-
-            recognition.onerror = function(event) {
-                console.error('Speech recognition error', event);
-            };
-
-            recognition.start();
-        } else {
-            alert("Speech recognition not supported in this browser.");
-        }
-    });
-</script>
-
-
-<script>
     let calendarInstance = null;
+    let active = true;
 
     document.addEventListener('DOMContentLoaded', function() {
+        // === Setup FullCalendar ===
         const calendarEl = document.getElementById('dashboard-calendar');
-
         calendarInstance = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             height: 'auto',
@@ -449,37 +415,30 @@
                         ${event.extendedProps.type ? `<p><strong>Type:</strong> ${event.extendedProps.type}</p>` : ''}
                     `,
                     icon: 'info',
-                    confirmButtonColor: '#3674B5',
-                    confirmButtonText: 'Close'
+                    confirmButtonColor: '#3674B5'
                 });
             }
         });
-
         calendarInstance.render();
-    });
 
-    window.addEventListener('DOMContentLoaded', () => {
-        const synth = window.speechSynthesis;
+        // === Voice Assistant + Navigation ===
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const synth = window.speechSynthesis;
 
-        if (!SpeechRecognition || !synth) {
-            alert("Speech features are not supported in your browser.");
-            return;
-        }
+        if (!SpeechRecognition || !synth) return alert("Speech features not supported.");
 
         const recognition = new SpeechRecognition();
+        recognition.continuous = false;
         recognition.lang = 'en-US';
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
-
-        let active = true;
 
         function speak(text, callback) {
             if (synth.speaking) synth.cancel();
             const utter = new SpeechSynthesisUtterance(text);
             utter.lang = 'en-US';
             utter.rate = 1;
-            if (callback) utter.onend = () => setTimeout(callback, 400);
+            if (callback) utter.onend = () => setTimeout(callback, 500);
             synth.speak(utter);
         }
 
@@ -487,107 +446,169 @@
             return calendarInstance ? calendarInstance.getEvents() : [];
         }
 
-        function speakCalendarEvents(callback) {
-            const events = getCalendarEvents();
-            const now = new Date();
-            const upcoming = events.filter(e => e.start >= now);
+        function isSameDay(d1, d2) {
+            return d1.getFullYear() === d2.getFullYear() &&
+                d1.getMonth() === d2.getMonth() &&
+                d1.getDate() === d2.getDate();
+        }
 
-            if (upcoming.length === 0) {
-                speak("You have no upcoming events.", callback);
-                return;
-            }
+        function speakCalendarEvents(callback) {
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+
+            const upcoming = getCalendarEvents().filter(e => {
+                const eventDate = new Date(e.start instanceof Date ? e.start : e.start.replace(" ", "T"));
+                eventDate.setHours(0, 0, 0, 0);
+                return eventDate >= now;
+            });
+
+            if (upcoming.length === 0) return speak("You have no upcoming events.", callback);
 
             let message = "Here are your upcoming events: ";
-            upcoming.slice(0, 5).forEach(event => {
-                const title = event.title;
-                const date = new Date(event.start).toLocaleDateString();
-                message += `${title} on ${date}. `;
+            upcoming.slice(0, 5).forEach(e => {
+                message += `${e.title} on ${new Date(e.start).toLocaleDateString()}. `;
             });
-
             speak(message, callback);
         }
 
-        function speakEventsOnSpecificDate(dateStr, callback) {
-            const events = getCalendarEvents();
-            const inputDate = new Date(dateStr);
+        function askForSpecificDate(callback) {
+            const date = {
+                year: '',
+                month: '',
+                day: ''
+            };
 
-            if (isNaN(inputDate.getTime())) {
-                speak("I couldn't understand the date you said. Please try again.", callback);
-                return;
+            function askYear() {
+                speak("What year?", () => {
+                    recognition.start();
+                    recognition.onresult = e => {
+                        date.year = e.results[0][0].transcript.match(/\d{4}/)?.[0];
+                        if (!date.year) return speak("Please say a valid year.", askYear);
+                        askMonth();
+                    };
+                });
             }
 
-            const matchingEvents = events.filter(e => {
-                return new Date(e.start).toDateString() === inputDate.toDateString();
-            });
+            function askMonth() {
+                speak("Which month?", () => {
+                    recognition.start();
+                    recognition.onresult = e => {
+                        const spoken = e.results[0][0].transcript.toLowerCase();
+                        const months = ["january", "february", "march", "april", "may", "june",
+                            "july", "august", "september", "october", "november", "december"
+                        ];
 
-            if (matchingEvents.length === 0) {
-                speak(`You have no events on ${inputDate.toDateString()}.`, callback);
-                return;
+                        let matchedIndex = months.findIndex(m => spoken.includes(m));
+                        if (matchedIndex === -1) {
+                            const fuzzy = {
+                                jan: 0,
+                                feb: 1,
+                                mar: 2,
+                                apr: 3,
+                                may: 4,
+                                jun: 5,
+                                jul: 6,
+                                aug: 7,
+                                sep: 8,
+                                oct: 9,
+                                nov: 10,
+                                dec: 11
+                            };
+                            for (const [key, index] of Object.entries(fuzzy)) {
+                                if (spoken.includes(key)) {
+                                    matchedIndex = index;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (matchedIndex === -1) return speak("Sorry, I couldn't understand the month. Please say it again.", askMonth);
+
+                        date.month = matchedIndex + 1;
+                        askDay();
+                    };
+                });
             }
 
-            let message = `On ${inputDate.toDateString()}, you have: `;
-            matchingEvents.forEach(event => {
-                message += `${event.title}. `;
-            });
+            function askDay() {
+                speak("Which day?", () => {
+                    recognition.start();
+                    recognition.onresult = e => {
+                        date.day = e.results[0][0].transcript.match(/\d{1,2}/)?.[0];
+                        if (!date.day) return speak("Please say a valid day.", askDay);
+                        readEventsOnDate(callback);
+                    };
+                });
+            }
 
-            speak(message, callback);
+            function readEventsOnDate(cb) {
+                const parsedDate = new Date(`${date.year}-${date.month}-${date.day}`);
+                if (isNaN(parsedDate)) return speak("Invalid date. Try again.", cb);
+
+                const matching = getCalendarEvents().filter(e =>
+                    isSameDay(new Date(e.start instanceof Date ? e.start : e.start.replace(" ", "T")), parsedDate)
+                );
+                if (matching.length === 0) return speak(`No events found on ${parsedDate.toDateString()}.`, cb);
+
+                let message = `On ${parsedDate.toDateString()}, you have: `;
+                matching.forEach(e => message += `${e.title}. `);
+                speak(message, cb);
+            }
+
+            askYear();
         }
 
-        function handleDashboardCommand(transcript) {
-            transcript = transcript.toLowerCase();
+        function handleCommand(text) {
+            const command = text.toLowerCase();
+            const has = (keywords) => keywords.every(k => command.includes(k));
 
-            if (transcript.includes("stop") || transcript.includes("exit")) {
+            // Navigation
+            if (has(['enter', 'dashboard'])) {
+                return window.location.href = "{{ route('studentdash.dashboard') }}";
+            }
+            if (has(['enter', 'classes'])) {
+                return window.location.href = "{{ route('studentdash.classes') }}";
+            }
+            if (has(['enter', 'active', 'class'])) {
+                return window.location.href = "{{ route('studentdash.activeclass') }}";
+            }
+
+            // Assistant
+            if (command.includes("stop") || command.includes("exit")) {
                 active = false;
-                speak("Voice assistant stopped.");
-                return;
+                return speak("Voice assistant stopped.");
             }
 
-            if (transcript.includes("calendar") || transcript.includes("events") || transcript.includes("upcoming")) {
+            if (command.includes("calendar") || command.includes("read events") || command.includes("upcoming")) {
                 document.getElementById('dashboard-calendar')?.scrollIntoView({
                     behavior: 'smooth'
                 });
-                speak("Reading your upcoming events now.", () => {
-                    speakCalendarEvents(startListening);
-                });
-            } else if (transcript.includes("enter my classes")) {
-                speak("Entering your classes.", () => {
-                    window.location.href = "{{ route('studentdash.classes') }}";
-                });
-            } else if (transcript.includes("enter my active class")) {
-                speak("Opening your active class.", () => {
-                    window.location.href = "{{ route('studentdash.activeclass') }}";
-                });
-            } else {
-                const dateMatch = transcript.match(/(?:on )?(january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2}/i);
-                if (dateMatch) {
-                    const spokenDate = new Date(`${dateMatch[0]} ${new Date().getFullYear()}`);
-                    speakEventsOnSpecificDate(spokenDate, startListening);
-                } else {
-                    speak("Sorry, I didn’t understand. You can say: read my calendar, enter my classes, or enter my active class.", startListening);
-                }
+                return speak("Here are your upcoming events.", () => speakCalendarEvents(startListening));
             }
+
+            if (command.includes("specific day") || command.includes("events on") || command.includes("check date")) {
+                return askForSpecificDate(startListening);
+            }
+
+            speak("You can say: read my calendar or check events on a specific date.", startListening);
         }
 
         function startListening() {
             if (!active) return;
-
             recognition.start();
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                console.log("🎤 Heard:", transcript);
-                handleDashboardCommand(transcript);
-            };
-
-            recognition.onerror = () => {
-                speak("Sorry, please say that again.", startListening);
-            };
+            recognition.onresult = e => handleCommand(e.results[0][0].transcript);
+            recognition.onerror = () => speak("Try again, please.", startListening);
         }
 
+        // Initial greeting
         setTimeout(() => {
-            speak("Welcome to your dashboard. You can say: read my calendar, enter my classes, or enter my active class.", startListening);
+            speak("Welcome to your dashboard. You can say: read my calendar, or check events on a specific date or Enter my classes or enter my active class", startListening);
         }, 1000);
     });
 </script>
+
+
+
 <style>
     #dashboard-calendar {
         max-width: 100%;

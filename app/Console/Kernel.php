@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \App\Console\Commands\FinalizeAcademicYear::class,
+        \App\Console\Commands\DeleteOldMessages::class,
     ];
 
     /**
@@ -34,8 +35,11 @@ class Kernel extends ConsoleKernel
 
         // ✅ Schedule your message deletion command to run hourly
         $schedule->command('app:delete-old-messages')->hourly();
+    
+    
+        $schedule->command('finalize:academic-year')->daily();
+    
     }
-
 
     /**
      * Register the commands for the application.

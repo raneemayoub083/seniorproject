@@ -113,61 +113,6 @@
 
         </section><!-- /About Section -->
 
-        <!-- Clients Section -->
-        <section id="clients" class="clients section">
-
-          <div class="container">
-
-            <div class="swiper init-swiper">
-              <script type="application/json" class="swiper-config">
-                {
-                  "loop": true,
-                  "speed": 600,
-                  "autoplay": {
-                    "delay": 5000
-                  },
-                  "slidesPerView": "auto",
-                  "pagination": {
-                    "el": ".swiper-pagination",
-                    "type": "bullets",
-                    "clickable": true
-                  },
-                  "breakpoints": {
-                    "320": {
-                      "slidesPerView": 2,
-                      "spaceBetween": 40
-                    },
-                    "480": {
-                      "slidesPerView": 3,
-                      "spaceBetween": 60
-                    },
-                    "640": {
-                      "slidesPerView": 4,
-                      "spaceBetween": 80
-                    },
-                    "992": {
-                      "slidesPerView": 6,
-                      "spaceBetween": 120
-                    }
-                  }
-                }
-              </script>
-              <div class="swiper-wrapper align-items-center">
-                <div class="swiper-slide"><img src="assets/img/clients/client-1.png" class="img-fluid" alt=""></div>
-                <div class="swiper-slide"><img src="assets/img/clients/client-2.png" class="img-fluid" alt=""></div>
-                <div class="swiper-slide"><img src="assets/img/clients/client-3.png" class="img-fluid" alt=""></div>
-                <div class="swiper-slide"><img src="assets/img/clients/client-4.png" class="img-fluid" alt=""></div>
-                <div class="swiper-slide"><img src="assets/img/clients/client-5.png" class="img-fluid" alt=""></div>
-                <div class="swiper-slide"><img src="assets/img/clients/client-6.png" class="img-fluid" alt=""></div>
-                <div class="swiper-slide"><img src="assets/img/clients/client-7.png" class="img-fluid" alt=""></div>
-                <div class="swiper-slide"><img src="assets/img/clients/client-8.png" class="img-fluid" alt=""></div>
-              </div>
-            </div>
-
-          </div>
-
-        </section><!-- /Clients Section -->
-
         <!-- Stats Section -->
         <section id="stats" class="stats section">
 
@@ -379,12 +324,12 @@
 
                 <div class="swiper-slide">
                   <div class="testimonial-item">
-                    <img src="assets/img/testimonials/student.jpg" class="testimonial-img" alt="Blind student">
-                    <h3>Aaliyah Rahim</h3>
-                    <h4>Blind Student</h4>
+                    <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="Blind student">
+                    <h3>Ali Rahim</h3>
+                    <h4>Blind Student Parent</h4>
                     <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                     <p><i class="bi bi-quote quote-icon-left"></i>
-                      <span>VisionVoice changed my life. I can access my calendar, listen to lessons, and attend virtual classes—all with my voice.</span>
+                      <span>VisionVoice changed my child's life. He can access his calendar, listen to lessons, and attend virtual classes—all with my voice.</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>
@@ -392,8 +337,8 @@
 
                 <div class="swiper-slide">
                   <div class="testimonial-item">
-                    <img src="assets/img/testimonials/parent.jpg" class="testimonial-img" alt="Parent">
-                    <h3>Mohammed Kassem</h3>
+                    <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="Parent">
+                    <h3>Lina Kassem</h3>
                     <h4>Parent</h4>
                     <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                     <p><i class="bi bi-quote quote-icon-left"></i>
@@ -405,7 +350,7 @@
 
                 <div class="swiper-slide">
                   <div class="testimonial-item">
-                    <img src="assets/img/testimonials/teacher.jpg" class="testimonial-img" alt="Teacher">
+                    <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="Teacher">
                     <h3>Rania Khoury</h3>
                     <h4>Special Education Teacher</h4>
                     <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
@@ -418,12 +363,12 @@
 
                 <div class="swiper-slide">
                   <div class="testimonial-item">
-                    <img src="assets/img/testimonials/admin.jpg" class="testimonial-img" alt="School admin">
+                    <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="School admin">
                     <h3>Imad Fayad</h3>
                     <h4>School Administrator</h4>
                     <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
                     <p><i class="bi bi-quote quote-icon-left"></i>
-                      <span>We've adopted VisionVoice across our special education programs. It's smart, secure, and most importantly—inclusive.</span>
+                      <span> VisionVoice across all special education programs. It's smart, secure, and most importantly—inclusive.</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>

@@ -196,4 +196,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/parent/classes/{studentId}', [ParentDashboardController::class, 'fetchStudentClasses'])->name('parentdash.classes.fetch');
         Route::post('/parent/subject-info', [ParentDashboardController::class, 'getSubjectInfo']);
     });
+    Route::get('/parent/report-card/{student}/{section}', [ParentDashboardController::class, 'generateReportCard'])->name('parentdash.reportCard');
+    Route::get('/parent/report-card/{student}/{section}/download', [ParentDashboardController::class, 'downloadReportCardPdf'])->name('parentdash.reportCard.download');
+    Route::post('/parent/enroll-next/{student}/{currentSection}', [ParentDashboardController::class, 'enrollToNextGrade']);
 });

@@ -22,8 +22,9 @@
                         <tr>
                             <th>Academic Year</th>
                             <th>Class Name</th>
-                            <th>Subjects</th>
                             <th>Status</th>
+                            <th>Subjects</th>
+
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -36,7 +37,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
-
     <script>
         $(document).ready(function() {
             let table = $('#classesTable').DataTable();
@@ -53,29 +53,60 @@
                         $('#classesTableContainer').fadeIn();
 
                         res.sections.forEach(section => {
-                            let subjects = (section.grade?.subjects || []).map(sub => `
-    <button class="btn btn-sm subject-btn" 
-            data-subject-id="${sub.id}" 
-            data-student-id="${studentId}" 
-            data-section-id="${section.id}" 
-            style="background-color:#3674B5; color:white; margin:2px;">
-        ${sub.name}
-    </button>
-`).join(" ");
+                            const subjects = (section.grade?.subjects || []).map(sub => `
+                            <button class="btn btn-sm subject-btn" 
+                                    data-subject-id="${sub.id}" 
+                                    data-student-id="${studentId}" 
+                                    data-section-id="${section.id}" 
+                                    style="background-color:#3674B5; color:white; margin:2px;">
+                                ${sub.name}
+                            </button>
+                        `).join(" ");
 
-                            let status = section.pivot?.status ?? 'N/A';
+                            const status = section.pivot?.status ?? 'N/A';
+                            const finalGrade = section.pivot?.final_grade !== null ? section.pivot.final_grade : 'N/A';
+
+                            let statusBadge = `<span class="badge rounded-pill bg-secondary">${status}</span>`;
+                            if (status === 'pass') statusBadge = `<span class="badge rounded-pill bg-success">✅ Pass</span>`;
+                            if (status === 'fail') statusBadge = `<span class="badge rounded-pill bg-danger">❌ Fail</span>`;
+
+                            const reportCardButton = `
+                            <a href="/parent/report-card/${studentId}/${section.id}" 
+                               class="btn btn-sm btn-outline-primary mt-2">
+                                📄 Report Card
+                            </a>
+                        `;
+
+                            let reEnrollBtn = '';
+                            if (status === 'pass' && res.nextAcademicYear) {
+                                reEnrollBtn = `
+        <button class="btn btn-sm btn-success enroll-btn mt-2"
+                data-student-id="${studentId}"
+                data-section-id="${section.id}">
+            ➕ Promote to Next Grade
+        </button>
+    `;
+                            }
 
                             table.row.add([
                                 section.academic_year?.name ?? 'N/A',
                                 section.grade?.name ?? 'N/A',
-                                subjects,
-                                `<span class="badge rounded-pill text-bg-primary" style="background-color:#3674B5;">${status}</span>`
+                                `
+                                <div class="d-flex flex-column align-items-center">
+                                    ${statusBadge}
+                                    <small class="text-muted">Final Grade: ${finalGrade}</small>
+                                    ${reportCardButton}
+                                    ${reEnrollBtn}
+                                </div>
+                            `,
+                                subjects
                             ]).draw(false);
                         });
                     }
                 });
             });
         });
+
         $(document).on('click', '.subject-btn', function() {
             const subjectId = $(this).data('subject-id');
             const studentId = $(this).data('student-id');
@@ -97,7 +128,6 @@
                         res.exams.forEach(e => {
                             content += `<li><strong>${e.exam_title}</strong> - Grade: ${e.grade ?? 'N/A'}</li>`;
                         });
-
                         content += `</ul>`;
                     } else {
                         content += `<p>No exams found for this subject.</p>`;
@@ -108,7 +138,44 @@
                 }
             });
         });
+        $(document).on('click', '.enroll-btn', function(e) {
+            e.preventDefault();
+
+            const button = $(this);
+            const studentId = button.data('student-id');
+            const sectionId = button.data('section-id');
+
+            // Disable to prevent double click
+            button.prop('disabled', true).text('⏳ Processing...');
+
+            $.ajax({
+                url: `/parent/enroll-next/${studentId}/${sectionId}`,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Enrolled!',
+                        text: response.message || 'Student promoted to next grade successfully.',
+                        confirmButtonColor: '#3674B5'
+                    });
+                    button.text('✅ Promoted');
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: xhr.responseJSON?.message || 'Failed to enroll student. Try again later.',
+                        confirmButtonColor: '#d33'
+                    });
+                    button.prop('disabled', false).text('➕ Promote to Next Grade');
+                }
+            });
+        });
     </script>
+
 </x-layouts.app>
 <!-- Modal -->
 <div class="modal fade" id="subjectModal" tabindex="-1" aria-labelledby="subjectModalLabel" aria-hidden="true">

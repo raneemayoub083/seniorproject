@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\JsonResponse;
 
+
 class ContactController extends Controller
 {
     public function send(Request $request): JsonResponse
@@ -29,9 +30,6 @@ class ContactController extends Controller
             {$validated['message']}
         ";
 
-        \Log::info('Sending email with the following data:', $validated);
-        \Log::info('Email body preview: ' . $emailBody);
-
         Mail::raw($emailBody, function ($mail) use ($validated) {
             $mail->to('fatimadhaini14@gmail.com') // ✅ fixed recipient address
                 ->subject('Contact Form: ' . $validated['subject'])
@@ -49,8 +47,7 @@ class ContactController extends Controller
             ]
         ]);
     } catch (\Exception $e) {
-        \Log::error('Email failed to send: ' . $e->getMessage());
-        return response()->json([
+         return response()->json([
             'status' => 'error',
             'message' => 'There was an error sending your message.',
             'debug' => $e->getMessage()

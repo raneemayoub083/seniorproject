@@ -199,16 +199,18 @@
 
             function handleCommand(spokenText) {
                 spokenText = spokenText.toLowerCase();
-                console.log("🧠 Processing:", spokenText);
-                if (transcript.includes("enter my classes")) {
-                    speak("Entering your classes.", () => {
-                        window.location.href = "{{ route('studentdash.classes') }}";
-                    });
-                } else if (transcript.includes("enter my active class")) {
-                    speak("Opening your active class.", () => {
-                        window.location.href = "{{ route('studentdash.activeclass') }}";
-                    });
+
+                const has = (keywords) => keywords.every(k => spokenText.includes(k));
+                if (has(['enter', 'dashboard'])) {
+                    return window.location.href = "{{ route('studentdash.dashboard') }}";
                 }
+                if (has(['enter', 'classes'])) {
+                    return window.location.href = "{{ route('studentdash.classes') }}";
+                }
+                if (has(['enter', 'active', 'class'])) {
+                    return window.location.href = "{{ route('studentdash.activeclass') }}";
+                }
+              
                 if (spokenText.includes("stop") || spokenText.includes("exit") || spokenText.includes("goodbye")) {
                     active = false;
                     speak("Okay, stopping now. Have a great day!");

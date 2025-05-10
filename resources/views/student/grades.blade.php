@@ -8,7 +8,18 @@
         </p>
 
         <h5 class="mt-4 text-center">
-            Grades for {{ $student->application?->first_name }} {{ $student->application?->last_name }} — Section: {{ $section->grade->name }} / {{ $section->academicYear->name }}
+            Grades for {{ $student->application?->first_name }} {{ $student->application?->last_name }}
+            — Section: {{ $section->grade->name }} / {{ $section->academicYear->name }}
+            @if($sectionStudent)
+            <br>
+            <span class="badge 
+            @if($sectionStudent->status === 'pass') bg-success 
+            @elseif($sectionStudent->status === 'fail') bg-danger 
+            @else bg-secondary 
+            @endif">
+                {{ ucfirst($sectionStudent->status) }} — Final Grade: {{ $sectionStudent->final_grade ?? 'N/A' }}
+            </span>
+            @endif
         </h5>
 
         <div class="row my-4 justify-content-center">
@@ -51,52 +62,52 @@
 
     <script>
         $(document).ready(function() {
-                    const studentId = "{{ $student->id }}";
-                    const sectionId = "{{ $section->id }}";
+            const studentId = "{{ $student->id }}";
+            const sectionId = "{{ $section->id }}";
 
-                    const table = $('#gradesTable').DataTable({
-                        pagingType: "full_numbers",
-                        lengthMenu: [
-                            [10, 25, 50, -1],
-                            [10, 25, 50, "All"]
-                        ],
-                        responsive: true,
-                        language: {
-                            search: "_INPUT_",
-                            searchPlaceholder: "Search exams...",
+            const table = $('#gradesTable').DataTable({
+                pagingType: "full_numbers",
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                responsive: true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search exams...",
+                }
+            });
+
+            $('#subjectSelect').on('change', function() {
+                const subjectId = $(this).val();
+                const studentId = "{{ $student->id }}";
+                const sectionId = "{{ $section->id }}";
+                const url = `/student/${studentId}/grades/${sectionId}/subject/${subjectId}`; // ✅ full dynamic URL
+
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
                         }
-                    });
+                        return response.json();
+                    })
+                    .then(data => {
+                        table.clear();
 
-                    $('#subjectSelect').on('change', function() {
-                        const subjectId = $(this).val();
-                        const studentId = "{{ $student->id }}";
-                        const sectionId = "{{ $section->id }}";
-                        const url = `/student/${studentId}/grades/${sectionId}/subject/${subjectId}`; // ✅ full dynamic URL
-
-                        fetch(url)
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error(`HTTP error! status: ${response.status}`);
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                table.clear();
-
-                                if (data.length === 0) {
-                                    table.row.add(['No exams found.', '—']).draw();
-                                } else {
-                                    data.forEach(row => {
-                                        table.row.add([row.exam_title, row.grade]);
-                                    });
-                                    table.draw();
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Fetch error:', error);
-                                Swal.fire('Error', 'Could not load grades. Please check console.', 'error');
+                        if (data.length === 0) {
+                            table.row.add(['No exams found.', '—']).draw();
+                        } else {
+                            data.forEach(row => {
+                                table.row.add([row.exam_title, row.grade]);
                             });
+                            table.draw();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                        Swal.fire('Error', 'Could not load grades. Please check console.', 'error');
                     });
-                });
+            });
+        });
     </script>
 </x-layouts.app>

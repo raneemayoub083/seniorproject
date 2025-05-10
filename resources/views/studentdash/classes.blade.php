@@ -70,15 +70,28 @@
 
                         </td>
 
-                        <td>
-                            @if($section->pivot->status == 'active')
-                            <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
-                            <dotlottie-player src="https://lottie.host/cf4a3a40-ad45-4a21-911f-2f79cfa39d92/l955HeQexv.lottie" background="transparent" speed="1" style="width: 150px; height: 150px" loop autoplay></dotlottie-player>
-                            @elseif($section->pivot->status == 'passed')
-                            <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
-                            <dotlottie-player src="https://lottie.host/c5b5b45f-720c-4993-bfa4-1ee8078a4ea1/QKp2UNm6GW.lottie" background="transparent" speed="1" style="width: 150px; height: 150px" loop autoplay></dotlottie-player>
+                        <td class="text-center">
+                            @php
+                            $pivot = $section->pivot;
+                            @endphp
+
+                            @if($pivot->status === 'active')
+                            <span class="badge bg-warning text-dark">⏳ Not finalized yet</span>
+                            @elseif($pivot->status === 'pass')
+                            <div class="d-flex flex-column align-items-center">
+                                <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+                                <dotlottie-player src="https://lottie.host/c5b5b45f-720c-4993-bfa4-1ee8078a4ea1/QKp2UNm6GW.lottie" background="transparent" speed="1" style="width: 100px; height: 100px;" loop autoplay></dotlottie-player>
+                                <span class="mt-2 badge bg-success">✅ Passed — Grade: {{ $pivot->final_grade ?? 'N/A' }}</span>
+                            </div>
+                            @elseif($pivot->status === 'fail')
+                            <div class="d-flex flex-column align-items-center">
+                                <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+                                <dotlottie-player src="https://lottie.host/9dc84801-8db6-4bb2-bcb0-e2a5e09ea9a4/7DhZbHxrLb.lottie" background="transparent" speed="1" style="width: 100px; height: 100px;" loop autoplay></dotlottie-player>
+                                <span class="mt-2 badge bg-danger">❌ Failed — Grade: {{ $pivot->final_grade ?? 'N/A' }}</span>
+                            </div>
                             @endif
                         </td>
+
 
                     </tr>
                     @empty
@@ -362,7 +375,18 @@
                     speak("Voice assistant stopped. Goodbye.");
                     return;
                 }
-
+                // Navigation
+               
+                const has = (keywords) => keywords.every(k => spokenText.includes(k));
+                if (has(['enter', 'dashboard'])) {
+                    return window.location.href = "{{ route('studentdash.dashboard') }}";
+                }
+                if (has(['enter', 'classes'])) {
+                    return window.location.href = "{{ route('studentdash.classes') }}";
+                }
+                if (has(['enter', 'active', 'class'])) {
+                    return window.location.href = "{{ route('studentdash.activeclass') }}";
+                }
                 if (spokenText.includes("read classes")) {
                     readClasses(() => {
                         if (active) speak("Would you like to hear marks or attendance?", listenForCommand);

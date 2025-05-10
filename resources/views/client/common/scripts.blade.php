@@ -8,8 +8,7 @@
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/js/sweetalert2.min.js"></script>
-<script src="assets/js/sweetalert.min.js"></script>
+
 
   <!-- Main JS File -->
   <script src="assets/js/clientmain.js"></script>

@@ -21,22 +21,20 @@ class StudentController extends Controller
 
     public function showClasses()
     {
-        // Get the authenticated user
         $user = auth()->user();
 
-        // Fetch the student's sections with academic years and grades
-        $student = Student::with('sections.academicYear', 'sections.grade')
-            ->where('user_id', $user->id)
-            ->first();
+        $student = Student::with([
+            'sections' => function ($query) {
+                $query->with('academicYear', 'grade.subjects')
+                    ->withPivot('status', 'final_grade'); // ✅ load pivot fields
+            }
+        ])->where('user_id', $user->id)->first();
 
-        // Get all sections
         $sections = $student ? $student->sections : collect();
-        
 
-
-        // Pass the sections to the view
         return view('studentdash.classes', compact('sections'));
     }
+
     public function showActiveClass()
     {
         // Get the authenticated user
@@ -124,6 +122,7 @@ class StudentController extends Controller
     }
     public function adminViewGrades(Student $student, Section $section)
     {
+        // Get all distinct subjects for the section
         $subjects = DB::table('section_subject_teacher')
             ->join('subjects', 'section_subject_teacher.subject_id', '=', 'subjects.id')
             ->where('section_subject_teacher.section_id', $section->id)
@@ -134,6 +133,7 @@ class StudentController extends Controller
         $firstSubject = $subjects->first();
         $grades = collect();
 
+        // Load grades for the first subject by default
         if ($firstSubject) {
             $grades = DB::table('exam_student_grades')
                 ->join('exams', 'exams.id', '=', 'exam_student_grades.exam_id')
@@ -152,8 +152,16 @@ class StudentController extends Controller
                 ->get();
         }
 
-        return view('student.grades', compact('student', 'section', 'subjects', 'grades', 'firstSubject'));
+        // Load the section_student pivot row to get final grade and status
+        $sectionStudent = DB::table('section_student')
+            ->where('student_id', $student->id)
+            ->where('section_id', $section->id)
+            ->first();
+
+        // Pass all to the view
+        return view('student.grades', compact('student', 'section', 'subjects', 'grades', 'firstSubject', 'sectionStudent'));
     }
+
 
     public function adminFilterGradesBySubject(Student $student, Section $section, $subjectId)
     {
