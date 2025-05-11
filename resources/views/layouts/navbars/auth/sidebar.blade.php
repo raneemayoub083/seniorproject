@@ -272,6 +272,17 @@
 
             @endif
             @endif
+            <li class="nav-item pb-2">
+                <a class="nav-link {{ request()->is('face/register') ? 'active' : '' }}" href="{{ url('/face/register') }}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path class="color-background"
+                                d="M224 256A128 128 0 1 0 224 0a128 128 0 0 0 0 256zm0 32c-70.7 0-208 35.3-208 106.7V464c0 26.5 21.5 48 48 48h320c26.5 0 48-21.5 48-48v-69.3C432 323.3 294.7 288 224 288z" />
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Register Face ID</span>
+                </a>
+            </li>
 
         </ul>
     </div>

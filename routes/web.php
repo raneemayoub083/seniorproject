@@ -19,6 +19,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\BrailleController;
 use App\Http\Controllers\EventController; 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FaceDescriptorController;
 use App\Http\Controllers\CameraController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ExamController;
@@ -46,6 +47,11 @@ use Illuminate\Support\Facades\Cache;
 Route::get('/', function () {
     return view('client.index');
 });
+Route::get('/face/register', function () {
+    return view('face.register');
+});
+
+Route::post('/face/save-descriptor', [FaceDescriptorController::class, 'store']);
 
 Route::get('/apply', [GradeController::class, 'showApplyForm'])->name('apply');
 Route::post('/applications/store', [ApplicationController::class, 'store'])->name('application.store');

@@ -1,68 +1,170 @@
-<section class="">
+<section class="login-section">
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+
     <!-- Background Video -->
-    <video autoplay muted loop playsinline class="position-absolute ">
+    <video autoplay muted loop playsinline class="bg-video">
         <source src="{{ asset('assets/videos/bg.mp4') }}" type="video/mp4">
     </video>
-    <div class="dark-overlay position-absolute w-100 h-100 top-0 start-0"></div>
+    <div class="dark-overlay"></div>
+
     <!-- Content -->
-    <div class="page-header section-height-75 position-relative z-index-1">
-        <div class="container">
-            <div class="row">
-                <div class="col-6 mt-8" style="margin-right: 80px;">
-                    <h3 class="font-weight-bolder text-info text-gradient">{{ __('Welcome ') }}</h3>
+    <div class="container d-flex flex-column align-items-center justify-content-center text-white text-center section-height-100">
+        <img src="{{ asset('assets/img/visionvoicelogo.png') }}" alt="Logo" class="mb-4 animated-logo">
+
+        <h1 class=" mb-5 text-white">Welcome to Vision Voice</h1>
+
+        <div class="row w-100 justify-content-center">
+            <!-- Face ID Login -->
+            <div class="col-lg-5 col-md-6 mb-4 ">
+                <div class="glass-card p-4 h-100 ">
+                    <h4 class="mb-3 text-info text-white">Face ID Login</h4>
+                    <div class="glow-frame mb-3">
+                        <video id="faceLoginCam" width="100%" height="240" autoplay muted></video>
+                    </div>
+                    <button id="faceLogin" class="btn pulse-button w-100">Login with Face</button>
+                </div>
+            </div>
+
+            <!-- Email Login -->
+            <div class="col-lg-5 col-md-6 mb-4">
+                <div class="glass-card p-4 h-100 ">
+                    <h4 class="mb-3 text-info text-white">Email Login</h4>
                     <form wire:submit.prevent="login" action="{{ route('login') }}" method="POST">
-
-                        <div class="mb-3">
-                            <label for="email" class="l">{{ __('Email: ') }}</label>
-                            <input wire:model.live="email" id="email" type="email" class="form-control"
-                                placeholder="Email">
+                        <div class="mb-3 text-start">
+                            <label for="email" class="form-label text-white">Email</label>
+                            <input wire:model.live="email" id="email" type="email" class="form-control" placeholder="Email">
                         </div>
-                        <div class="mb-3">
-                            <label for="password" class="l">{{ __('Password:') }}</label>
-                            <input wire:model.live="password" id="password" type="password" class="form-control"
-                                placeholder="Password">
+                        <div class="mb-3 text-start">
+                            <label for="password" class="form-label text-white">Password</label>
+                            <input wire:model.live="password" id="password" type="password" class="form-control" placeholder="Password">
                         </div>
-                        <div class="text-center">
-                            <button type="submit"
-                                class="btn bg-gradient-info w-50 mt-4 mb-0">{{ __('Sign in') }}</button>
-                        </div>
+                        <button type="submit" style="background-color:#3674B5" class="btn pulse-button btn-info w-100 mt-2">Sign In</button>
                     </form>
-                </div>
+                    <!-- From Uiverse.io by Nawsome -->
+                    <div class="container">
+                        <div class="loader"></div>
+                        <div class="loader"></div>
+                        <div class="loader"></div>
+                    </div>
 
-                <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mt-8">
-                    <img src="../assets/img/visionvoicelogo.png" alt="Logo" class="rotating">
                 </div>
-
             </div>
         </div>
     </div>
+
     <style>
-        video {
-            object-fit: cover;
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .dark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
             z-index: -1;
         }
 
-        /* Define the keyframes for the rotation animation */
-        @keyframes spin {
+        .section-height-100 {
+            min-height: 100vh;
+        }
+
+        .animated-logo {
+            width: 120px;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .animated-gradient {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #3674B5, #4facfe, #3674B5);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to {
+                background-position: -200% center;
+            }
+        }
+
+        .glass-card {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            color: #fff;
+        }
+
+        .glow-frame {
+            border: 2px solid #3674B5;
+            border-radius: 12px;
+            padding: 4px;
+            animation: glow-border 1.5s infinite alternate;
+        }
+
+        @keyframes glow-border {
             from {
-                transform: rotate(0deg);
+                box-shadow: 0 0 10px #3674B5;
             }
 
             to {
-                transform: rotate(360deg);
+                box-shadow: 0 0 20px #3674B5, 0 0 30px #3674B5;
             }
         }
 
-        /* Apply the animation to elements with the 'rotating' class */
-        .rotating {
-            animation: spin 150s linear infinite;
+        .pulse-button {
+            background-color: #3674B5;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 194, 255, 0.6);
+            }
+
+            70% {
+                box-shadow: 0 0 0 12px rgba(0, 194, 255, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 194, 255, 0);
+            }
+        }
+
+        .pulse-button:hover {
+            background-color: #007bbf;
         }
     </style>
-
-
 </section>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -229,5 +331,77 @@
             retryUtter.onend = () => location.reload();
             window.speechSynthesis.speak(retryUtter);
         });
+    });
+</script>
+<script>
+    const faceCam = document.getElementById('faceLoginCam');
+    const faceLoginBtn = document.getElementById('faceLogin');
+
+    async function loadFaceLogin() {
+        await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+        await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
+        await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
+
+        navigator.mediaDevices.getUserMedia({
+                video: {}
+            })
+            .then(stream => faceCam.srcObject = stream);
+    }
+
+    faceLoginBtn.addEventListener('click', async () => {
+        const detection = await faceapi
+            .detectSingleFace(faceCam, new faceapi.TinyFaceDetectorOptions())
+            .withFaceLandmarks()
+            .withFaceDescriptor();
+
+        if (!detection) {
+            Swal.fire("Face not detected.");
+            return;
+        }
+
+        const userDescriptor = detection.descriptor;
+
+        const response = await fetch('/api/face-login-check', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                descriptor: Array.from(userDescriptor)
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            Swal.fire("Face match successful!", "Redirecting...", "success");
+console.log(result);
+            let redirectUrl = "/dashboard"; // default
+
+            switch (result.role) {
+                case "admin":
+                    redirectUrl = "/dashboard";
+                    break;
+                case "teacher":
+                    redirectUrl = "/teacher/dashboard";
+                    break;
+                case "student":
+                    redirectUrl = "/student/dashboard";
+                    break;
+                case "parent":
+                    redirectUrl = "/parent/dashboard";
+                    break;
+            }
+
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 1500);
+        } else {
+            Swal.fire("Face not recognized. Please use email/password.");
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        loadFaceLogin();
     });
 </script>
