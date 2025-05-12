@@ -10,7 +10,17 @@
 
         <!-- Dropdown to select section + subject -->
         <div class="row mb-4">
-            <div class="col-md-12">
+            <div class="col-md-6">
+                <label for="yearFilter" class="form-label">Filter by Academic Year</label>
+                <select class="form-select" id="yearFilter">
+                    <option value="all" selected>All Academic Years</option>
+                    @foreach($assignments->pluck('section.academicYear.name')->unique() as $yearName)
+                    <option value="{{ $yearName }}">{{ $yearName }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-6">
                 <label for="assignmentSelect" class="form-label">Select Class & Subject:</label>
                 <select class="form-select" id="assignmentSelect">
                     <option disabled selected>Select Class and Subject</option>
@@ -18,13 +28,15 @@
                     <option
                         value="{{ $a->id }}"
                         data-section="{{ $a->section_id }}"
-                        data-subject="{{ $a->subject_id }}">
-                        {{ $a->section->grade->name }} - {{ $a->section->name }} ({{ $a->subject->name }})
+                        data-subject="{{ $a->subject_id }}"
+                        data-year="{{ $a->section->academicYear->name }}">
+                        {{ $a->section->academicYear->name }} - {{ $a->section->grade->name }} {{ $a->section->name }} ({{ $a->subject->name }})
                     </option>
                     @endforeach
                 </select>
             </div>
         </div>
+
 
         <!-- Calendar -->
         <div class="mt-4" id="calendar"></div>
@@ -64,6 +76,23 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const allOptions = $('#assignmentSelect option').clone(); // backup
+
+            $('#yearFilter').on('change', function() {
+                const selectedYear = $(this).val();
+                $('#assignmentSelect').empty().append(allOptions.first().clone()); // reset with "Select" option
+
+                allOptions.each(function() {
+                    const year = $(this).data('year');
+                    if (selectedYear === 'all' || year === selectedYear) {
+                        $('#assignmentSelect').append($(this).clone());
+                    }
+                });
+            });
+        });
+    </script>
 
     <script>
         let calendar;

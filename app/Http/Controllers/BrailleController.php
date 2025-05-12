@@ -57,6 +57,7 @@ class BrailleController extends Controller
     private function convertToBraille($text)
     {
         $brailleMap = [
+            // Letters
             'a' => '⠁',
             'b' => '⠃',
             'c' => '⠉',
@@ -83,14 +84,39 @@ class BrailleController extends Controller
             'x' => '⠭',
             'y' => '⠽',
             'z' => '⠵',
-            ' ' => ' '
+            ' ' => ' ',
+
+            // Digits (a-j used after ⠼)
+            '1' => '⠼⠁', // number sign + a
+            '2' => '⠼⠃',
+            '3' => '⠼⠉',
+            '4' => '⠼⠙',
+            '5' => '⠼⠑',
+            '6' => '⠼⠋',
+            '7' => '⠼⠛',
+            '8' => '⠼⠓',
+            '9' => '⠼⠊',
+            '0' => '⠼⠚'
         ];
 
         $text = strtolower($text);
         $braille = '';
+        $previousWasDigit = false;
 
         foreach (str_split($text) as $char) {
-            $braille .= $brailleMap[$char] ?? $char;
+            if (ctype_digit($char)) {
+                // Only insert ⠼ once per group of digits
+                if (!$previousWasDigit) {
+                    $braille .= '⠼';
+                    $previousWasDigit = true;
+                }
+                // Map number to Braille a–j
+                $digitMap = ['1' => '⠁', '2' => '⠃', '3' => '⠉', '4' => '⠙', '5' => '⠑', '6' => '⠋', '7' => '⠛', '8' => '⠓', '9' => '⠊', '0' => '⠚'];
+                $braille .= $digitMap[$char];
+            } else {
+                $braille .= $brailleMap[$char] ?? $char;
+                $previousWasDigit = false;
+            }
         }
 
         return $braille;

@@ -16,16 +16,22 @@ class AttendanceController extends Controller
     public function calendar()
     {
         $assignments = auth()->user()->teacher->sectionSubjectTeachers()
-            ->with(['section.grade', 'subject'])
+            ->with(['section.grade', 'section.academicYear', 'subject'])
+
             ->get();
 
         return view('teacherdash.attendance.calendar', compact('assignments'));
     }
 
 
-    public function events()
+    public function events(Request $request)
     {
+        $sectionId = $request->query('section_id');
+        $subjectId = $request->query('subject_id');
+
         $records = Attendance::select('date', DB::raw('count(*) as total'))
+            ->where('section_id', $sectionId)
+            ->where('subject_id', $subjectId)
             ->groupBy('date')
             ->get()
             ->map(fn($rec) => [

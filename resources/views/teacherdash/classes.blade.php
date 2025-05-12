@@ -7,6 +7,18 @@
                 <span class="hover-text" aria-hidden="true">&nbsp;Classes&nbsp;</span>
             </button>
         </p>
+        <div class="mb-3">
+            <label for="academicYearFilter" class="form-label fw-bold">Filter by Academic Year</label>
+            <select id="academicYearFilter" class="form-select">
+                <option value="">-- All Years --</option>
+                @php
+                $academicYears = $classes->pluck('academicYear')->unique('id')->filter()->sortByDesc('start_date');
+                @endphp
+                @foreach($academicYears as $year)
+                <option value="{{ $year->name }}">{{ $year->name }}</option>
+                @endforeach
+            </select>
+        </div>
 
         <div class="table-responsive">
             <table id="academicyears" class="table table-striped table-bordered">
@@ -120,7 +132,7 @@
     </div>
 
     <!-- jQuery -->
-   
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
 
@@ -128,13 +140,18 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- DataTables JS -->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-
     <script>
         $(document).ready(function() {
-            // Initialize DataTables
-            $('#academicyears').DataTable();
+            // Initialize DataTable
+            var table = $('#academicyears').DataTable();
 
-            // Set sectionSubjectTeacherId in the modal
+            // Filter table by academic year
+            $('#academicYearFilter').on('change', function() {
+                const selectedYear = $(this).val();
+                table.columns(0).search(selectedYear).draw();
+            });
+
+            // Set sectionSubjectTeacherId in modal
             $(".add-lesson-btn").click(function() {
                 var sectionSubjectTeacherId = $(this).data("section-subject-teacher-id");
                 $("#sectionSubjectTeacherId").val(sectionSubjectTeacherId);
@@ -169,7 +186,7 @@
                             });
                         }
                     },
-                    error: function(xhr) {
+                    error: function() {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -180,6 +197,7 @@
             });
         });
     </script>
+ 
 
     <!-- Add Lesson Modal -->
     <div class="modal fade" id="addLessonModal" tabindex="-1" aria-labelledby="addLessonLabel" aria-hidden="true">
