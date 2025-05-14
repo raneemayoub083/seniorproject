@@ -27,8 +27,8 @@
 
                         <p><strong>Grade:</strong> {{ $activeSection?->grade->name ?? 'N/A' }}</p>
                         <p><strong>Academic Year:</strong> {{ $activeSection?->academicYear?->name ?? 'N/A' }}</p>
-                        <a href="#" class="btn btn-sm" style="background-color:#3674B5; color:white;">View Grades</a>
-                        <a href="#" class="btn btn-sm btn-outline-secondary">View Attendance</a>
+                        <a href="/parent/classes" class="btn btn-sm" style="background-color:#3674B5; color:white;">View Grades</a>
+                        <a href="/parent/classes" class="btn btn-sm btn-outline-secondary">View Attendance</a>
                         <div class="row mt-4">
                             <div class="col-md-6">
                                 <h6 class="text-muted">Attendance</h6>
@@ -56,7 +56,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        const studentCharts =JSON.parse('{!! json_encode($studentCharts) !!}');
+        const studentCharts = JSON.parse('{!! json_encode($studentCharts) !!}');
         document.addEventListener("DOMContentLoaded", function() {
             Object.entries(studentCharts).forEach(([studentId, data]) => {
                 // Attendance Chart
